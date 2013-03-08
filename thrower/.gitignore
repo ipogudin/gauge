@@ -1,0 +1,21 @@
+#Eclipse project metadata
+.cproject
+.project
+.settings
+#Autotools generated files
+aclocal.m4
+autom4te.cache
+config.log
+config.status
+configure
+depcomp
+install-sh
+Makefile
+Makefile.in
+missing
+autoscan.log
+#compile files
+.deps
+*.o
+!*.[ch]
+src/throwerd

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+source $(dirname "${BASH_SOURCE[0]}")/commons
+
+AUTOTOOLS_GENERATED_FILES_DIR=../
+SRC_DIR=../src/
+
+function clean_autotools_generated_files() {
+rm -rf \
+aclocal.m4 \
+autom4te.cache \
+config.log \
+config.status \
+configure \
+depcomp \
+install-sh \
+Makefile \
+Makefile.in \
+missing \
+autoscan.log
+}
+
+cd $AUTOTOOLS_GENERATED_FILES_DIR
+make clean
+clean_autotools_generated_files
+cd $SCRIPTPATH
+cd $SRC_DIR
+rm *.o
+clean_autotools_generated_files

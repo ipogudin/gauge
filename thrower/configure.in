@@ -14,6 +14,13 @@ AC_PROG_CC
 
 # Checks for library functions.
 
+AC_PROG_RANLIB
+
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+
 AC_CONFIG_FILES([Makefile
-                 src/Makefile])
+                 src/Makefile
+                 src/utils/Makefile
+                 tests/Makefile
+                 tests/utils/Makefile])
 AC_OUTPUT

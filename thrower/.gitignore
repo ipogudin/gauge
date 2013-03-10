@@ -16,6 +16,6 @@ missing
 autoscan.log
 #compile files
 .deps
-*.o
+*.[oa]
 !*.[ch]
 src/throwerd

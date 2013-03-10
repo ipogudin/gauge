@@ -20,7 +20,7 @@
 #define OV_INT 'i'
 #define OV_STRING 's'
 
-struct option {
+struct configuration_option {
   char short_name;
   char* name;
   option_type type;
@@ -42,5 +42,7 @@ struct configuration_element {
  * Initialize configuration with command line arguments
  */
 extern int init_configuration(int argc, char *argv[]);
+
+extern struct configuration_element* get_configuration_element(char* name);
 
 #endif /* CONFIGURATION_H_ */

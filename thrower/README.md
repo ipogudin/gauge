@@ -1,4 +1,4 @@
 thrower
 =====
 
-It is a component which sends and receive test data to/from HTTP servers.
+The thrower component sends test requests and receives responses to/from HTTP servers.

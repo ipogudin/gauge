@@ -1,4 +1,4 @@
 gauge
 =====
 
-A simple performance measurement tool for HTTP servers
+The simple performance measurement tool for HTTP servers.

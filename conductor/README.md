@@ -1,4 +1,4 @@
 conductor
 =====
 
-It is a component which controls behavior and shows results.
+The conductor component controls behavior and shows results.

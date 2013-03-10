@@ -2,8 +2,11 @@
 
 source $(dirname "${BASH_SOURCE[0]}")/commons
 
-AUTOTOOLS_GENERATED_FILES_DIR=../
+PROJECT_ROOT=../
 SRC_DIR=../src/
+LIBUTILS_DIR=../src/utils/
+TESTS_DIR=../tests/
+TESTS_LIBUTILS_DIR=../tests/utils/
 
 function clean_autotools_generated_files() {
 rm -rf \
@@ -20,10 +23,18 @@ missing \
 autoscan.log
 }
 
-cd $AUTOTOOLS_GENERATED_FILES_DIR
+cd $PROJECT_ROOT
 make clean
 clean_autotools_generated_files
 cd $SCRIPTPATH
 cd $SRC_DIR
-rm *.o
+clean_autotools_generated_files
+cd $SCRIPTPATH
+cd $LIBUTILS_DIR
+clean_autotools_generated_files
+cd $SCRIPTPATH
+cd $TESTS_DIR
+clean_autotools_generated_files
+cd $SCRIPTPATH
+cd $TESTS_LIBUTILS_DIR
 clean_autotools_generated_files

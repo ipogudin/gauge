@@ -6,18 +6,18 @@
  */
 
 #include <tests/tests.h>
-#include <configuration.h>
+#include <utils/platform.h>
 
-START_TEST(test_default_confiuration)
+START_TEST(test_platform)
 {
 
 }
 END_TEST
 
 BEGIN
-  SUITE("Configuration")
+  SUITE("Platform")
     CASE("Core")
-      TEST(test_default_confiuration)
+      TEST(test_platform)
     END_CASE
   END_SUITE
 END

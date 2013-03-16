@@ -1,6 +1,6 @@
-AM_CFLAGS = -I$(top_srcdir)/include
-
 SUBDIRS = utils
+
+AM_CFLAGS = -I$(top_srcdir)/include
 
 bin_PROGRAMS = throwerd
 throwerd_SOURCES = \

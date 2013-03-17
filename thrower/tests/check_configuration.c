@@ -9,9 +9,7 @@
 #include <configuration.h>
 
 START_TEST(test_default_confiuration)
-{
 
-}
 END_TEST
 
 BEGIN

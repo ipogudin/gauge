@@ -8,6 +8,6 @@
 #ifndef ERRORS_H_
 #define ERRORS_H_
 
-extern int exception_handler_index;
+#include <errno.h>
 
 #endif /* ERRORS_H_ */

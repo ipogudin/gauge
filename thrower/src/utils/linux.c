@@ -5,6 +5,7 @@
  *      Author: Ivan Pogudin <i.a.pogudin@gmail.com>
  */
 #include <utils/platform.h>
+#include <stdlib.h>
 
 struct thread* current_thread()
 {

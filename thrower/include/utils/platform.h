@@ -1,6 +1,8 @@
 /*
  * platform.h
  *
+ * Platform API for common purposes
+ *
  *  Created on: Mar 2, 2013
  *      Author: Ivan Pogudin <i.a.pogudin@gmail.com>
  */
@@ -10,10 +12,10 @@
 
 #include <pthread.h>
 
+typedef pthread_t thread_id;
+
 //concurrency utils
 #define MAX_THREAD_NAME_LENGTH 16
-
-typedef pthread_t thread_id;
 
 struct thread_group {
   char* name;

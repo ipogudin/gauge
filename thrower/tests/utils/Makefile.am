@@ -2,14 +2,26 @@
 CFLAGS = @CFLAGS@ -I$(top_srcdir)/include
 
 TESTS = \
+  check_strings \
   check_platform \
   check_errors \
   check_collections
 
 check_PROGRAMS = \
+  check_strings \
   check_platform \
   check_errors \
   check_collections
+
+check_strings_SOURCES = \
+  check_strings.c \
+  $(top_builddir)/include/strings.h \
+  $(top_builddir)/include/tests/tests.h
+check_strings_CFLAGS = @CHECK_CFLAGS@
+check_strings_LDADD = \
+  $(top_srcdir)/src/utils/libutils.a \
+  @CHECK_LIBS@
+
 
 check_platform_SOURCES = \
   check_platform.c \

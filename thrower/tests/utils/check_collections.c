@@ -20,16 +20,17 @@ START_TEST(test_hash_map_creation)
   fail_unless(map->value_type == INT, "A value type must be INT");
   fail_unless(map->size == 0, "Just created hash map must be empty");
   fail_unless(map->hash_size == HASH_SIZE, "Hash size must be 8");
-  fail_unless(map->calculate_hash_code != NULL, "A hash function must be defined");
+  fail_unless(map->calculate_hash_code != NULL,
+      "A hash function must be defined");
   free_hash_map(map);
 END_TEST
 
 START_TEST(test_calculation_hash_code_for_string)
   const unsigned int HASH_SIZE = 8;
   struct hash_map* map = create_hash_map(HASH_SIZE, STRING, INT);
-  unsigned int hash_code1 = map->calculate_hash_code(map, "string");
-  unsigned int hash_code2 = map->calculate_hash_code(map, "string");
-  unsigned int hash_code3 = map->calculate_hash_code(map, "test string");
+  unsigned int hash_code1 = map->calculate_hash_code("string");
+  unsigned int hash_code2 = map->calculate_hash_code("string");
+  unsigned int hash_code3 = map->calculate_hash_code("test string");
 
   char* message1 = sformat(
       MESSAGE_BUFFER_SIZE,
@@ -37,6 +38,7 @@ START_TEST(test_calculation_hash_code_for_string)
       hash_code1, hash_code2
       );
   fail_unless(hash_code1 == hash_code2, message1);
+  free(message1);
 
   char* message2 = sformat(
       MESSAGE_BUFFER_SIZE,
@@ -48,11 +50,122 @@ START_TEST(test_calculation_hash_code_for_string)
   free_hash_map(map);
 END_TEST
 
+START_TEST(test_calculation_hash_code_for_uint)
+  const unsigned int HASH_SIZE = 8;
+  struct hash_map* map = create_hash_map(HASH_SIZE, INT, INT);
+  unsigned int hash_code1 = map->calculate_hash_code((unsigned int)1);
+  unsigned int hash_code2 = map->calculate_hash_code((unsigned int)1);
+  unsigned int hash_code3 = map->calculate_hash_code((unsigned int)3);
+
+  char* message1 = sformat(
+      MESSAGE_BUFFER_SIZE,
+      "A hash code of the same uint numbers must be equal  ('%u' != '%u')",
+      hash_code1, hash_code2
+      );
+  fail_unless(hash_code1 == hash_code2, message1);
+  free(message1);
+
+  char* message2 = sformat(
+      MESSAGE_BUFFER_SIZE,
+      "A hash code of different uint numbers must be different ('%u' != '%u')",
+      hash_code1, hash_code3);
+  fail_unless(hash_code1 != hash_code3, message2);
+  free(message2);
+
+  free_hash_map(map);
+END_TEST
+
+START_TEST(test_calculation_hash_code_for_int)
+  const unsigned int HASH_SIZE = 8;
+  struct hash_map* map = create_hash_map(HASH_SIZE, INT, INT);
+  unsigned int hash_code1 = map->calculate_hash_code(-1);
+  unsigned int hash_code2 = map->calculate_hash_code(-1);
+  unsigned int hash_code3 = map->calculate_hash_code(3);
+
+  char* message1 = sformat(
+      MESSAGE_BUFFER_SIZE,
+      "A hash code of the same int numbers must be equal  ('%u' != '%u')",
+      hash_code1, hash_code2
+      );
+  fail_unless(hash_code1 == hash_code2, message1);
+  free(message1);
+
+  char* message2 = sformat(
+      MESSAGE_BUFFER_SIZE,
+      "A hash code of different int numbers must be different ('%u' != '%u')",
+      hash_code1, hash_code3);
+  fail_unless(hash_code1 != hash_code3, message2);
+  free(message2);
+
+  free_hash_map(map);
+END_TEST
+
+START_TEST(test_adding_and_getting_key_value_pair)
+  const unsigned int HASH_SIZE = 8;
+  struct hash_map* map = create_hash_map(HASH_SIZE, STRING, INT);
+  char* key = sformat(
+      MESSAGE_BUFFER_SIZE,
+      "key1"
+      );
+  int value = 1000;
+  add_to_hash_map(map, key, value);
+
+  struct hash_map_result* result =  get_value_from_hash_map(map, key);
+  char* message1 = sformat(
+      MESSAGE_BUFFER_SIZE,
+      "The key [%s] doen't exists",
+      key
+      );
+  fail_unless(result->exists, message1);
+  free(message1);
+
+  int actual_value = result->value;
+  char* message2 = sformat(
+      MESSAGE_BUFFER_SIZE,
+      "The key [%s] doesn't correspond with the value [%d] \
+ but the actual value is [%d]",
+      key, value, actual_value
+      );
+  fail_unless(value == actual_value, message2);
+  free(result);
+  free(message2);
+
+  free_hash_map(map);
+END_TEST
+
+START_TEST(test_adding_and_removing_key_value_pair)
+  const unsigned int HASH_SIZE = 8;
+  struct hash_map* map = create_hash_map(HASH_SIZE, STRING, INT);
+  char* key = sformat(
+        MESSAGE_BUFFER_SIZE,
+        "key1"
+        );
+  int value = 1000;
+  add_to_hash_map(map, key, value);
+  remove_from_hash_map(map, key);
+
+  struct hash_map_result* result =  get_value_from_hash_map(map, key);
+  char* message1 = sformat(
+      MESSAGE_BUFFER_SIZE,
+      "The key [%s] must be removed",
+      key
+      );
+  fail_unless(!result->exists, message1);
+  free(result);
+  free(message1);
+
+  free_hash_map(map);
+END_TEST
+
 BEGIN
   SUITE("Collections")
     CASE("HashMap")
       TEST(test_hash_map_creation)
       TEST(test_calculation_hash_code_for_string)
+      TEST(test_calculation_hash_code_for_uint)
+      TEST(test_calculation_hash_code_for_int)
+      TEST(test_adding_and_getting_key_value_pair)
+      TEST(test_adding_and_removing_key_value_pair)
     END_CASE
   END_SUITE
 END

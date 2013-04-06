@@ -8,13 +8,19 @@
 #ifndef COMMONS_H_
 #define COMMONS_H_
 
+typedef int bool;
+#define TRUE (bool)1
+#define FALSE (bool)0
+
 enum types {
   VOID,
   STRING,
   SINT,
   USINT,
   UINT,
-  INT
+  INT,
+  ULONG,
+  LONG
 };
 
 #endif /* COMMONS_H_ */

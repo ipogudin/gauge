@@ -19,3 +19,8 @@ autoscan.log
 *.[oa]
 !*.[ch]
 src/throwerd
+tests/check_configuration
+tests/utils/check_collections
+tests/utils/check_errors
+tests/utils/check_platform
+tests/utils/check_strings

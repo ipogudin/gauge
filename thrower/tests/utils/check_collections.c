@@ -32,20 +32,15 @@ START_TEST(test_calculation_hash_code_for_string)
   unsigned int hash_code2 = map->calculate_hash_code("string");
   unsigned int hash_code3 = map->calculate_hash_code("test string");
 
-  char* message1 = sformat(
-      MESSAGE_BUFFER_SIZE,
+  fail_unless(
+      hash_code1 == hash_code2,
       "Hash code of the same string must be equal  ('%u' != '%u')",
-      hash_code1, hash_code2
-      );
-  fail_unless(hash_code1 == hash_code2, message1);
-  free(message1);
+      hash_code1, hash_code2);
 
-  char* message2 = sformat(
-      MESSAGE_BUFFER_SIZE,
+  fail_unless(
+      hash_code1 != hash_code3,
       "Hash code of different strings must be different ('%u' != '%u')",
       hash_code1, hash_code3);
-  fail_unless(hash_code1 != hash_code3, message2);
-  free(message2);
 
   free_hash_map(map);
 END_TEST
@@ -57,20 +52,16 @@ START_TEST(test_calculation_hash_code_for_uint)
   unsigned int hash_code2 = map->calculate_hash_code((unsigned int)1);
   unsigned int hash_code3 = map->calculate_hash_code((unsigned int)3);
 
-  char* message1 = sformat(
-      MESSAGE_BUFFER_SIZE,
+  fail_unless(
+      hash_code1 == hash_code2,
       "A hash code of the same uint numbers must be equal  ('%u' != '%u')",
-      hash_code1, hash_code2
-      );
-  fail_unless(hash_code1 == hash_code2, message1);
-  free(message1);
+      hash_code1, hash_code2);
 
-  char* message2 = sformat(
-      MESSAGE_BUFFER_SIZE,
+
+  fail_unless(
+      hash_code1 != hash_code3,
       "A hash code of different uint numbers must be different ('%u' != '%u')",
       hash_code1, hash_code3);
-  fail_unless(hash_code1 != hash_code3, message2);
-  free(message2);
 
   free_hash_map(map);
 END_TEST
@@ -82,20 +73,15 @@ START_TEST(test_calculation_hash_code_for_int)
   unsigned int hash_code2 = map->calculate_hash_code(-1);
   unsigned int hash_code3 = map->calculate_hash_code(3);
 
-  char* message1 = sformat(
-      MESSAGE_BUFFER_SIZE,
+  fail_unless(
+      hash_code1 == hash_code2,
       "A hash code of the same int numbers must be equal  ('%u' != '%u')",
-      hash_code1, hash_code2
-      );
-  fail_unless(hash_code1 == hash_code2, message1);
-  free(message1);
+      hash_code1, hash_code2);
 
-  char* message2 = sformat(
-      MESSAGE_BUFFER_SIZE,
+  fail_unless(
+      hash_code1 != hash_code3,
       "A hash code of different int numbers must be different ('%u' != '%u')",
       hash_code1, hash_code3);
-  fail_unless(hash_code1 != hash_code3, message2);
-  free(message2);
 
   free_hash_map(map);
 END_TEST
@@ -111,24 +97,18 @@ START_TEST(test_adding_and_getting_key_value_pair)
   add_to_hash_map(map, key, value);
 
   struct hash_map_result* result =  get_value_from_hash_map(map, key);
-  char* message1 = sformat(
-      MESSAGE_BUFFER_SIZE,
+  fail_unless(
+      result->exists,
       "The key [%s] doen't exists",
-      key
-      );
-  fail_unless(result->exists, message1);
-  free(message1);
+      key);
 
   int actual_value = result->value;
-  char* message2 = sformat(
-      MESSAGE_BUFFER_SIZE,
+  fail_unless(
+      value == actual_value,
       "The key [%s] doesn't correspond with the value [%d] \
- but the actual value is [%d]",
-      key, value, actual_value
-      );
-  fail_unless(value == actual_value, message2);
+but the actual value is [%d]",
+      key, value, actual_value);
   free(result);
-  free(message2);
 
   free_hash_map(map);
 END_TEST
@@ -145,14 +125,11 @@ START_TEST(test_adding_and_removing_key_value_pair)
   remove_from_hash_map(map, key);
 
   struct hash_map_result* result =  get_value_from_hash_map(map, key);
-  char* message1 = sformat(
-      MESSAGE_BUFFER_SIZE,
+  fail_unless(
+      !result->exists,
       "The key [%s] must be removed",
-      key
-      );
-  fail_unless(!result->exists, message1);
+      key);
   free(result);
-  free(message1);
 
   free_hash_map(map);
 END_TEST

@@ -2,9 +2,7 @@
 
 source $(dirname "${BASH_SOURCE[0]}")/commons
 
-ROOT_DIR=..
-
-cd $ROOT_DIR
+root
 aclocal
 autoconf
 automake --add-missing

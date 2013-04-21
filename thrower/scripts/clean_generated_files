@@ -2,12 +2,6 @@
 
 source $(dirname "${BASH_SOURCE[0]}")/commons
 
-PROJECT_ROOT=../
-SRC_DIR=../src/
-LIBUTILS_DIR=../src/utils/
-TESTS_DIR=../tests/
-TESTS_LIBUTILS_DIR=../tests/utils/
-
 function clean_autotools_generated_files() {
 rm -rf \
 aclocal.m4 \
@@ -20,21 +14,12 @@ install-sh \
 Makefile \
 Makefile.in \
 missing \
-autoscan.log
+autoscan.log \
+config.guess \
+config.sub
 }
 
-cd $PROJECT_ROOT
+echo $1
+cd $1
 make clean
-clean_autotools_generated_files
-cd $SCRIPTPATH
-cd $SRC_DIR
-clean_autotools_generated_files
-cd $SCRIPTPATH
-cd $LIBUTILS_DIR
-clean_autotools_generated_files
-cd $SCRIPTPATH
-cd $TESTS_DIR
-clean_autotools_generated_files
-cd $SCRIPTPATH
-cd $TESTS_LIBUTILS_DIR
 clean_autotools_generated_files

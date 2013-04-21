@@ -3,10 +3,11 @@
 
 AC_PREREQ([2.69])
 AC_INIT([throwerd], [0.0.0], [i.a.pogudin@gmail.com])
+AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([1.9 foreign])
 
 # Checks for programs.
-AC_PROG_CC
+AC_PROG_CXX
 
 # Checks for libraries.
 
@@ -14,13 +15,6 @@ AC_PROG_CC
 
 # Checks for library functions.
 
-AC_PROG_RANLIB
-
-PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
-
 AC_CONFIG_FILES([Makefile
-                 src/Makefile
-                 src/utils/Makefile
-                 tests/Makefile
-                 tests/utils/Makefile])
+                 src/Makefile])
 AC_OUTPUT

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source $(dirname "${BASH_SOURCE[0]}")/commons
+CLEAN=$SCRIPTPATH/clean_generated_files
+
+POCO_SRC=deps/src/poco/
+DEPS_BIN=deps/bin/
+
+root
+$CLEAN $DEPS_BIN all
+$CLEAN $POCO_SRC poco_root
+find $POCO_SRC -type d -exec $CLEAN {} poco \;

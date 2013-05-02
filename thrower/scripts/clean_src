@@ -6,4 +6,6 @@ CLEAN=$SCRIPTPATH/clean_generated_files
 SRC_DIR=src/
 
 root
-find . -type d -exec $CLEAN {} \;
+$CLEAN "." "thrower"
+cd $SRC_DIR
+find . -type d -exec $CLEAN {} "thrower" \;

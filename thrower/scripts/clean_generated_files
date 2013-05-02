@@ -19,7 +19,32 @@ config.guess \
 config.sub
 }
 
-echo $1
+function clean_poco_root_generated_files() {
+rm -rf \
+config.make \
+lib
+}
+
+function clean_poco_generated_files() {
+rm -rf \
+.dep \
+bin \
+obj
+}
+
+function clean_all() {
+rm -rf *
+}
+
 cd $1
-make clean
-clean_autotools_generated_files
+
+if [ "$2" == "thrower" ] ; then
+	make clean
+	clean_autotools_generated_files
+elif [ "$2" == "poco_root" ] ; then
+	clean_poco_root_generated_files
+elif [ "$2" == "poco" ] ; then
+	clean_poco_generated_files
+elif [ "$2" == "all" ] ; then
+	clean_all
+fi

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+source $(dirname "${BASH_SOURCE[0]}")/commons
+
+POCO_SRC=deps/src/poco
+
+root
+cd $POCO_SRC
+./configure --omit=Data/ODBC,Data/MySQL,Data/SQLite --prefix=../../bin/
+#TODO -j4 should be refactored
+make -j4 && make install

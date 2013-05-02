@@ -1,0 +1,5 @@
+.dep/
+bin/
+obj/
+config.make
+lib/

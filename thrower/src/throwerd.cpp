@@ -5,9 +5,9 @@
  *      Author: Ivan Pogudin <i.a.pogudin@gmail.com>
  */
 
-#include <iostream>
+#include "Thrower.h"
 
 int main(int argc, char **argv) {
-  std::cout << "thrower\n";
+  Thrower::Thrower thrower;
+  return thrower.run(argc, argv);
 }
-

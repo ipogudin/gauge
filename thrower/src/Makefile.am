@@ -6,4 +6,5 @@ AM_LDFLAGS = -L$(top_srcdir)/deps/usr/lib \
 bin_PROGRAMS = throwerd
 throwerd_SOURCES = throwerd.cpp \
   Thrower.h Thrower.cpp \
-  Configuration.h Configuration.cpp
+  Configuration.h Configuration.cpp \
+  Logger.h Logger.cpp

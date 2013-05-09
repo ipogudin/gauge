@@ -29,7 +29,7 @@ using Poco::Util::IntValidator;
 namespace Thrower
 {
 
-  Thrower::Thrower():helpRequested(false)
+  Thrower::Thrower():helpRequested(false),logger(Logger::logger("Thrower"))
   {
 
   }
@@ -80,6 +80,7 @@ namespace Thrower
 
   int Thrower::main(const std::vector<std::string>& args)
   {
+    logger.debug("Thrower is starting...");
     if (!helpRequested)
     {
       waitForTerminationRequest();

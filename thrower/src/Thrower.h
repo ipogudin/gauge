@@ -12,6 +12,7 @@
 #include <Poco/Util/OptionSet.h>
 
 #include "Configuration.h"
+#include "Logger.h"
 
 using Poco::Util::ServerApplication;
 using Poco::Util::OptionSet;
@@ -19,6 +20,9 @@ using Poco::Util::OptionSet;
 namespace Thrower
 {
 
+  /*
+   * The main class representing the thrower application.
+   */
   class Thrower: public Poco::Util::ServerApplication
   {
   public:
@@ -33,6 +37,7 @@ namespace Thrower
     int main(const std::vector<std::string>& args);
   private:
     bool helpRequested;
+    Logger& logger;
     Configuration configuration;
   };
 

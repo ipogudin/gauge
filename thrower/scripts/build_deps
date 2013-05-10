@@ -3,9 +3,21 @@
 source $(dirname "${BASH_SOURCE[0]}")/commons
 
 POCO_SRC=deps/src/poco
+GMOCK_SRC=deps/src/gmock
+GTEST_SRC=deps/src/gmock/gtest
 
 root
 cd $POCO_SRC
 ./configure --omit=Data/ODBC,Data/MySQL,Data/SQLite --prefix=../../usr/
 #TODO -j4 should be refactored
 make -j4 && make install
+
+
+root
+cd $GMOCK_SRC
+./configure
+make -j4
+cp -rf lib/.libs/* ../../usr/lib
+cp -rf include/* ../../usr/include
+cp -rf gtest/lib/.libs/* ../../usr/lib
+cp -rf gtest/include/* ../../usr/include

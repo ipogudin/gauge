@@ -4,9 +4,28 @@ source $(dirname "${BASH_SOURCE[0]}")/commons
 CLEAN=$SCRIPTPATH/clean_generated_files
 
 POCO_SRC=deps/src/poco/
+GMOCK_SRC=deps/src/gmock/
 DEPS_USR=deps/usr/
 
 root
 $CLEAN $DEPS_USR all
 $CLEAN $POCO_SRC poco_root
 find $POCO_SRC -type d -exec $CLEAN {} poco \;
+
+root
+cd $GMOCK_SRC
+make clean
+rm -rf \
+build-aux/config.h \
+build-aux/stamp-h1 \
+gtest/build-aux/config.h \
+gtest/build-aux/stamp-h1 \
+gtest/lib \
+gtest/libtool \
+gtest/samples/.dirstamp \
+gtest/scripts/gtest-config \
+gtest/src/.dirstamp \
+lib \
+libtool \
+scripts/gmock-config \
+src/.dirstamp

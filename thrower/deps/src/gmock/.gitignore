@@ -1,0 +1,23 @@
+#generated files must be ignored
+build-aux/config.h
+build-aux/stamp-h1
+gtest/build-aux/config.h
+gtest/build-aux/stamp-h1
+gtest/lib/
+gtest/libtool
+gtest/samples/.dirstamp
+gtest/samples/.libs/
+gtest/samples/libsamples.la
+gtest/samples/sample1.lo
+gtest/samples/sample2.lo
+gtest/samples/sample4.lo
+gtest/scripts/gtest-config
+gtest/src/.dirstamp
+gtest/src/gtest-all.lo
+gtest/src/gtest_main.lo
+lib/
+libtool
+scripts/gmock-config
+src/.dirstamp
+src/gmock-all.lo
+src/gmock_main.lo

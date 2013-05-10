@@ -8,3 +8,4 @@ throwerd_SOURCES = throwerd.cpp \
   Thrower.h Thrower.cpp \
   Configuration.h Configuration.cpp \
   Logger.h Logger.cpp
+  

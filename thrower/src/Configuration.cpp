@@ -10,7 +10,7 @@
 namespace Thrower
 {
 
-  Configuration::Configuration():port(4040)
+  Configuration::Configuration():_port(4040),_logLevel("notification")
   {
 
   }
@@ -22,12 +22,21 @@ namespace Thrower
 
   unsigned Configuration::getPort() const
   {
-    return port;
+    return _port;
   }
 
   void Configuration::setPort(unsigned int port)
   {
-    this->port = port;
+    _port = port;
   }
 
+  std::string Configuration::getLogLevel() const
+  {
+    return _logLevel;
+  }
+
+  void Configuration::setLogLevel(std::string logLevel)
+  {
+    _logLevel = logLevel;
+  }
 } /* namespace Thrower */

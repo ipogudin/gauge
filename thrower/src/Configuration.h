@@ -8,6 +8,8 @@
 #ifndef CONFIGURATION_H_
 #define CONFIGURATION_H_
 
+#include <string>
+
 namespace Thrower
 {
 
@@ -19,11 +21,14 @@ namespace Thrower
     ~Configuration();
 
     unsigned getPort() const;
-
     void setPort(unsigned int port);
 
+    std::string getLogLevel() const;
+    void setLogLevel(std::string logLevel);
+
   private:
-    unsigned int port;
+    unsigned int _port;
+    std::string _logLevel;
   };
 
 } /* namespace Thrower */

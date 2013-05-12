@@ -33,11 +33,13 @@ namespace Thrower
                       const std::string& value);
     void handlePort(const std::string& name,
                           const std::string& value);
+    void handleLogLevel(const std::string& name,
+                        const std::string& value);
     void defineOptions(OptionSet& options);
     int main(const std::vector<std::string>& args);
   private:
     bool helpRequested;
-    Logger& logger;
+    Logger logger;
     Configuration configuration;
   };
 

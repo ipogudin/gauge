@@ -22,6 +22,7 @@ namespace Thrower
   {
   public:
     static Logger& logger(const std::string& name);
+    static void setLevel(const std::string& level);
 
     void fatal(const std::string& msg);
     void critical(const std::string& msg);
@@ -32,11 +33,9 @@ namespace Thrower
     void debug(const std::string& msg);
     void trace(const std::string& msg);
 
-    void setLevel(const std::string& level);
+    ~Logger();
   protected:
     Logger(Poco::Logger& logger);
-    virtual
-    ~Logger();
   private:
     Poco::Logger& _logger;
   };

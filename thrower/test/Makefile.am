@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -std=c++0x -I$(top_srcdir)/deps/usr/include \
+AM_CPPFLAGS = -std=c++11 -I$(top_srcdir)/deps/usr/include \
   -I$(top_srcdir)/src
 AM_LDFLAGS = -L$(top_srcdir)/deps/usr/lib \
 -lPocoFoundation -lPocoUtil\

@@ -6,7 +6,6 @@
  */
 
 #include "Logger.h"
-#include <iostream>
 
 #include "Poco/AsyncChannel.h"
 #include "Poco/ConsoleChannel.h"
@@ -25,7 +24,6 @@ namespace Thrower
 
   void Logger::setLevel(const std::string& level)
   {
-    Poco::Logger::root().setLevel(level);
     std::vector<std::string> names;
     Poco::Logger::names(names);
     for(

@@ -15,6 +15,8 @@ AC_PROG_CXX
 
 # Checks for library functions.
 
+AC_PROG_RANLIB
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile
                  test/Makefile])

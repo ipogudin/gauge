@@ -15,6 +15,7 @@
 #include <Poco/Util/HelpFormatter.h>
 #include <Poco/Util/IntValidator.h>
 #include <Poco/Util/RegExpValidator.h>
+#include <Poco/Delegate.h>
 
 #include "Thrower.h"
 
@@ -27,11 +28,12 @@ using Poco::Util::OptionCallback;
 using Poco::Util::HelpFormatter;
 using Poco::Util::IntValidator;
 using Poco::Util::RegExpValidator;
+using Poco::Delegate;
 
 namespace Thrower
 {
 
-  Thrower::Thrower():helpRequested(false),logger(Logger::logger("Thrower"))
+  Thrower::Thrower():_helpRequested(false),logger(Logger::logger("Thrower"))
   {
 
   }
@@ -43,6 +45,8 @@ namespace Thrower
 
   void Thrower::defineOptions(OptionSet& options)
   {
+    _configuration.optionUpdated += Poco::delegate(this, &Thrower::onOptionUpdated);
+
     ServerApplication::defineOptions(options);
 
     options.addOption(
@@ -51,39 +55,23 @@ namespace Thrower
           .repeatable(false)
           .callback(OptionCallback<Thrower>(
               this, &Thrower::handleHelp)));
-    options.addOption(
-      Option("port", "", "Set a management port value")
-          .required(false)
-          .repeatable(false)
-          .argument("port")
-          .validator(new IntValidator(1, 65535))
-          .callback(OptionCallback<Thrower>(
-              this, &Thrower::handlePort)));
-    options.addOption(
-      Option("loglevel", "", "Set a log level (default information)\n"
-          "Available levels: "
-          "trace, debug, information, notice, warning, error, critical, fatal")
-          .required(false)
-          .repeatable(false)
-          .argument("loglevel")
-          .validator(new RegExpValidator(
-              "(trace|debug|information|notice|warning|error|critical|fatal)"
-              ))
-          .callback(OptionCallback<Thrower>(
-              this, &Thrower::handleLogLevel)));
-  }
 
-  void Thrower::handlePort(const std::string& name,
-                    const std::string& value)
-  {
-    configuration.setPort(stoi(value));
-  }
-
-  void Thrower::handleLogLevel(const std::string& name,
-                    const std::string& value)
-  {
-    configuration.setLogLevel(value);
-    Logger::setLevel(value);
+    std::map<std::string, ConfigurationOption>::const_iterator iter;
+    for (iter = _configuration.begin(); iter != _configuration.end(); iter++)
+    {
+      ConfigurationOption co = iter->second;
+      Option o(co.getName(), "", co.getDescription());
+      o.required(false).repeatable(false);
+      if (!co.getArgument().empty())
+      {
+        o.argument(co.getArgument());
+        o.validator(co.getValidator());
+      }
+      o.callback(OptionCallback<Configuration>(
+        &_configuration, &Configuration::handleOption
+        ));
+      options.addOption(o);
+    }
   }
 
   void Thrower::handleHelp(const std::string& name,
@@ -96,17 +84,26 @@ namespace Thrower
         "Thrower is a part of tool for performance testing.");
     helpFormatter.format(std::cout);
     stopOptionsProcessing();
-    helpRequested = true;
+    _helpRequested = true;
   }
 
   int Thrower::main(const std::vector<std::string>& args)
   {
     logger.debug("Thrower is starting...");
-    if (!helpRequested)
+    if (!_helpRequested)
     {
       waitForTerminationRequest();
     }
     return Application::EXIT_OK;
+  }
+
+  void
+  Thrower::onOptionUpdated(const void* sender, std::string& name)
+  {
+    if (name == "loglevel")
+    {
+      Logger::setLevel(_configuration.getValue(name));
+    }
   }
 
 } /* namespace Thrower */

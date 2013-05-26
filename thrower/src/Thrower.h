@@ -31,16 +31,13 @@ namespace Thrower
   protected:
     void handleHelp(const std::string& name,
                       const std::string& value);
-    void handlePort(const std::string& name,
-                          const std::string& value);
-    void handleLogLevel(const std::string& name,
-                        const std::string& value);
     void defineOptions(OptionSet& options);
     int main(const std::vector<std::string>& args);
+    void onOptionUpdated(const void* sender, std::string& name);
   private:
-    bool helpRequested;
     Logger logger;
-    Configuration configuration;
+    bool _helpRequested;
+    Configuration _configuration;
   };
 
 } /* namespace Thrower */

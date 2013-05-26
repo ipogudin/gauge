@@ -7,6 +7,7 @@ AM_LDFLAGS = -L$(top_srcdir)/deps/usr/lib \
 bin_PROGRAMS = test
 test_LDADD=$(top_srcdir)/deps/usr/lib/libgmock_main.a \
   $(top_srcdir)/deps/usr/lib/libgmock.a \
-  $(top_srcdir)/deps/usr/lib/libgtest.a
+  $(top_srcdir)/deps/usr/lib/libgtest.a \
+  $(top_srcdir)/src/liblogger.a \
+  $(top_srcdir)/src/libconfiguration.a 
 test_SOURCES = ConfigurationTest.cpp
-  

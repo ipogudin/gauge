@@ -4,8 +4,22 @@ AM_LDFLAGS = -L$(top_srcdir)/deps/usr/lib \
 -lPocoXML
 
 bin_PROGRAMS = throwerd
-throwerd_SOURCES = throwerd.cpp \
-  Thrower.h Thrower.cpp \
-  Configuration.h Configuration.cpp \
+throwerd_SOURCES = throwerd.cpp
+
+throwerd_LDADD = \
+  libthrower.a \
+  libconfiguration.a \
+  liblogger.a
+
+noinst_LIBRARIES = libthrower.a \
+  libconfiguration.a \
+  liblogger.a
+
+libthrower_a_SOURCES = \
+  Thrower.h Thrower.cpp
+
+libconfiguration_a_SOURCES = \
+  Configuration.h Configuration.cpp
+
+liblogger_a_SOURCES = \
   Logger.h Logger.cpp
-  

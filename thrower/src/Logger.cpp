@@ -30,7 +30,7 @@ namespace Thrower
         std::vector<std::string>::iterator it = names.begin();
         it != names.end();
         ++it) {
-      Poco::Logger::get((std::string)it[0]).setLevel(level);
+      Poco::Logger::get((std::string)*it).setLevel(level);
     }
   }
 

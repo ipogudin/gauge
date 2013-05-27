@@ -18,11 +18,10 @@ TEST(ConfigurationTest, IterationThroughPredefinedConfigurationOptions)
   std::string expected = "loglevel port ";
   std::string actual;
   Configuration conf;
-  std::map<std::string, ConfigurationOption>::const_iterator iter;
 
-  for (iter = conf.begin(); iter != conf.end(); iter++)
+  for (auto& pair : conf)
   {
-    actual.append(iter->second.getName());
+    actual.append(pair.second.getName());
     actual.append(" ");
   }
   EXPECT_EQ(expected, actual);

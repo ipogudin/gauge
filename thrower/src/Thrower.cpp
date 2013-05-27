@@ -56,10 +56,9 @@ namespace Thrower
           .callback(OptionCallback<Thrower>(
               this, &Thrower::handleHelp)));
 
-    std::map<std::string, ConfigurationOption>::const_iterator iter;
-    for (iter = _configuration.begin(); iter != _configuration.end(); iter++)
+    for (auto& pair : _configuration)
     {
-      ConfigurationOption co = iter->second;
+      ConfigurationOption co = pair.second;
       Option o(co.getName(), "", co.getDescription());
       o.required(false).repeatable(false);
       if (!co.getArgument().empty())

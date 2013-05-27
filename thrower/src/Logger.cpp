@@ -26,11 +26,8 @@ namespace Thrower
   {
     std::vector<std::string> names;
     Poco::Logger::names(names);
-    for(
-        std::vector<std::string>::iterator it = names.begin();
-        it != names.end();
-        ++it) {
-      Poco::Logger::get((std::string)*it).setLevel(level);
+    for(auto& name : names) {
+      Poco::Logger::get((std::string)name).setLevel(level);
     }
   }
 

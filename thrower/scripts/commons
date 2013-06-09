@@ -4,6 +4,7 @@
 SCRIPT=$(readlink -f $0)
 # The absolute path to the scripts directory
 SCRIPTPATH=$(dirname $SCRIPT)
+ROOT=$SCRIPTPATH/..
 
 function root() {
   cd $SCRIPTPATH/../

@@ -6,6 +6,7 @@ CLEAN=$SCRIPTPATH/clean_generated_files
 POCO_SRC=deps/src/poco/
 GMOCK_SRC=deps/src/gmock/
 DEPS_USR=deps/usr/
+PROTOBUF_SRC=deps/src/protobuf
 
 root
 $CLEAN $DEPS_USR all
@@ -29,3 +30,16 @@ lib \
 libtool \
 scripts/gmock-config \
 src/.dirstamp
+
+root
+cd $PROTOBUF_SRC
+make clean
+rm -rf \
+config.h \
+gtest/build-aux/stamp-h1 \
+gtest/libtool \
+gtest/scripts/gtest-config \
+libtool \
+protobuf-lite.pc \
+protobuf.pc \
+stamp-h1

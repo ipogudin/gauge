@@ -4,13 +4,17 @@
  *  Created on: May 3, 2013
  *      Author: Ivan Pogudin <i.a.pogudin@gmail.com>
  */
+#include <stdio.h>
+
 #include <Poco/Util/IntValidator.h>
 #include <Poco/Util/RegExpValidator.h>
+#include <Poco/Delegate.h>
 
 #include "Configuration.h"
 
 using Poco::Util::IntValidator;
 using Poco::Util::RegExpValidator;
+using Poco::Delegate;
 
 namespace Thrower
 {
@@ -46,26 +50,31 @@ namespace Thrower
   }
   //class Configuration
 
-  Configuration::Configuration()
+  const std::string Configuration::PORT = "port";
+  const std::string Configuration::LOG_LEVEL = "loglevel";
+
+  Configuration::Configuration():logger(Logger::logger("Configuration"))
   {
-    _options["port"] = ConfigurationOption(
-        "port",
+    _options[PORT] = ConfigurationOption(
+        PORT,
         "Set a management port",
-        "port",
+        PORT,
         "4040",
         new IntValidator(1, 65535)
         );
-    _options["loglevel"] = ConfigurationOption(
-        "loglevel",
+    _options[LOG_LEVEL] = ConfigurationOption(
+        LOG_LEVEL,
         "Set a log level (default information)\n"
         "Available levels: "
         "trace, debug, information, notice, warning, error, critical, fatal",
-        "loglevel",
+        LOG_LEVEL,
         "notice",
         new RegExpValidator(
           "(trace|debug|information|notice|warning|error|critical|fatal)"
           )
         );
+
+    optionUpdated += Poco::delegate(this, &Configuration::onOptionUpdated);
   }
 
   Configuration::~Configuration()
@@ -92,6 +101,15 @@ namespace Thrower
       return _options[name].getValue();
     }
     throw "";
+  }
+
+  void
+  Configuration::onOptionUpdated(const void* sender, std::string& name)
+  {
+    std::string message = "The option \"";
+    message.append(name);
+    message.append("\" was updated");
+    logger.trace(message);
   }
 
 } /* namespace Thrower */

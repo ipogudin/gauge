@@ -14,6 +14,8 @@
 #include <Poco/AutoPtr.h>
 #include <Poco/BasicEvent.h>
 
+#include "Logger.h"
+
 using Poco::AutoPtr;
 using Poco::Util::Validator;
 using Poco::BasicEvent;
@@ -77,10 +79,10 @@ namespace Thrower
   }
 
   inline AutoPtr<Validator>&
-    ConfigurationOption::getValidator()
-    {
-      return _validator;
-    }
+  ConfigurationOption::getValidator()
+  {
+    return _validator;
+  }
   //ConfigurationOption end of inline section
 
   class Configuration
@@ -96,10 +98,15 @@ namespace Thrower
     inline std::map<std::string, ConfigurationOption>::const_iterator
       end() const;
     const std::string& getValue(const std::string& name);
+    void onOptionUpdated(const void* sender, std::string& name);
 
     BasicEvent<std::string> optionUpdated;
+
+    static const std::string PORT;
+    static const std::string LOG_LEVEL;
   private:
     std::map<std::string, ConfigurationOption> _options;
+    Logger logger;
   };
 
   //Configuration inline section

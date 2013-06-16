@@ -45,7 +45,8 @@ namespace Thrower
 
   void Thrower::defineOptions(OptionSet& options)
   {
-    _configuration.optionUpdated += Poco::delegate(this, &Thrower::onOptionUpdated);
+    Logger::initialize();
+    setLogger(logger.logger());
 
     ServerApplication::defineOptions(options);
 
@@ -88,23 +89,13 @@ namespace Thrower
 
   int Thrower::main(const std::vector<std::string>& args)
   {
-    logger.debug("Thrower is starting...");
+    logger.debug("Application has been started");
     if (!_helpRequested)
     {
       waitForTerminationRequest();
     }
     return Application::EXIT_OK;
   }
-
-  void
-  Thrower::onOptionUpdated(const void* sender, std::string& name)
-  {
-    if (name == "loglevel")
-    {
-      Logger::setLevel(_configuration.getValue(name));
-    }
-  }
-
 } /* namespace Thrower */
 
 

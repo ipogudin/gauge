@@ -106,10 +106,18 @@ namespace Thrower
   void
   Configuration::onOptionUpdated(const void* sender, std::string& name)
   {
-    std::string message = "The option \"";
-    message.append(name);
-    message.append("\" was updated");
-    logger.trace(message);
+    if (name == LOG_LEVEL)
+    {
+      Logger::setLevel(this->getValue(name));
+    }
+
+    if (logger.trace())
+    {
+      std::string message = "The option \"";
+      message.append(name);
+      message.append("\" was updated");
+      logger.trace(message);
+    }
   }
 
 } /* namespace Thrower */

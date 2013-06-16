@@ -33,7 +33,6 @@ namespace Thrower
                       const std::string& value);
     void defineOptions(OptionSet& options);
     int main(const std::vector<std::string>& args);
-    void onOptionUpdated(const void* sender, std::string& name);
   private:
     Logger logger;
     bool _helpRequested;

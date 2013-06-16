@@ -9,13 +9,28 @@
 
 #include "Poco/AsyncChannel.h"
 #include "Poco/ConsoleChannel.h"
+#include "Poco/FormattingChannel.h"
+#include "Poco/PatternFormatter.h"
+#include "Poco/AutoPtr.h"
 
 using Poco::AsyncChannel;
 using Poco::ConsoleChannel;
+using Poco::FormattingChannel;
+using Poco::PatternFormatter;
+using Poco::AutoPtr;
 
 namespace Thrower
 {
   //static public
+  void Logger::initialize()
+  {
+    ConsoleChannel* consoleChannel = new ConsoleChannel;
+    PatternFormatter* patternFormatter = new PatternFormatter;
+    patternFormatter->setProperty("pattern", "%Y-%m-%d %H:%M:%S.%i [%p] %s: %t");
+    FormattingChannel* formattingChannel = new FormattingChannel(patternFormatter, consoleChannel);
+    Poco::Logger::setChannel("", formattingChannel);
+  }
+
   Logger& Logger::logger(const std::string& name)
   {
     Logger* logger = new Logger(Poco::Logger::get(name));

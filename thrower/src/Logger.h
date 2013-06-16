@@ -21,6 +21,7 @@ namespace Thrower
   class Logger
   {
   public:
+    static void initialize();
     static Logger& logger(const std::string& name);
     static void setLevel(const std::string& level);
 
@@ -32,6 +33,17 @@ namespace Thrower
     void information(const std::string& msg);
     void debug(const std::string& msg);
     void trace(const std::string& msg);
+
+    bool fatal() const;
+    bool critical() const;
+    bool error() const;
+    bool warning() const;
+    bool notice() const;
+    bool information() const;
+    bool debug() const;
+    bool trace() const;
+
+    Poco::Logger& logger() const;
 
     ~Logger();
   protected:
@@ -78,6 +90,51 @@ namespace Thrower
   inline void Logger::trace(const std::string& msg)
   {
     _logger.trace(msg);
+  }
+
+  inline bool Logger::fatal() const
+  {
+    return _logger.fatal();
+  }
+
+  inline bool Logger::critical() const
+  {
+    return _logger.critical();
+  }
+
+  inline bool Logger::error() const
+  {
+    return _logger.error();
+  }
+
+  inline bool Logger::warning() const
+  {
+    return _logger.warning();
+  }
+
+  inline bool Logger::notice() const
+  {
+    return _logger.notice();
+  }
+
+  inline bool Logger::information() const
+  {
+    return _logger.information();
+  }
+
+  inline bool Logger::debug() const
+  {
+    return _logger.debug();
+  }
+
+  inline bool Logger::trace() const
+  {
+    return _logger.trace();
+  }
+
+  inline Poco::Logger& Logger::logger() const
+  {
+    return _logger;
   }
 } /* namespace Thrower */
 

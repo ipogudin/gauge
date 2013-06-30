@@ -1,0 +1,15 @@
+/*
+ * Exception.h
+ *
+ *  Created on: Jun 30, 2013
+ *      Author: Ivan Pogudin <i.a.pogudin@gmail.com>
+ */
+
+#ifndef EXCEPTION_H_
+#define EXCEPTION_H_
+
+#include <Poco/Exception.h>
+
+POCO_DECLARE_EXCEPTION(, ThrowerException, Poco::RuntimeException)
+
+#endif /* EXCEPTION_H_ */

@@ -11,6 +11,7 @@
 #include <Poco/Delegate.h>
 
 #include "Configuration.h"
+#include "Exception.h"
 
 using Poco::Util::IntValidator;
 using Poco::Util::RegExpValidator;
@@ -100,7 +101,7 @@ namespace Thrower
     {
       return _options[name].getValue();
     }
-    throw "";
+    throw Poco::LogicException("A parameter " + name + " is not found");
   }
 
   void

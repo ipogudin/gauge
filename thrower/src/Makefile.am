@@ -11,15 +11,9 @@ throwerd_LDADD = \
   libconfiguration.a \
   liblogger.a
 
-noinst_LIBRARIES = libthrower.a \
-  libconfiguration.a \
-  liblogger.a
+noinst_LIBRARIES = libthrower.a
 
 libthrower_a_SOURCES = \
-  Thrower.h Thrower.cpp
-
-libconfiguration_a_SOURCES = \
-  Configuration.h Configuration.cpp
-
-liblogger_a_SOURCES = \
+  Thrower.h Thrower.cpp \
+  Configuration.h Configuration.cpp \
   Logger.h Logger.cpp

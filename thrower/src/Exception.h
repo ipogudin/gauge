@@ -10,6 +10,8 @@
 
 #include <Poco/Exception.h>
 
-POCO_DECLARE_EXCEPTION(, ThrowerException, Poco::RuntimeException)
+#define MyLib_API
+
+//POCO_DECLARE_EXCEPTION(MyLib_API, ThrowerException, Poco::RuntimeException)
 
 #endif /* EXCEPTION_H_ */

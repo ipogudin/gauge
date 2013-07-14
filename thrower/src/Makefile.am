@@ -16,4 +16,5 @@ libthrower_a_SOURCES = \
   Thrower.h Thrower.cpp \
   Configuration.h Configuration.cpp \
   Logger.h Logger.cpp \
-  Exception.h Exception.cpp
+  Exception.h Exception.cpp \
+  commons.h

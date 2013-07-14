@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 #include <Configuration.h>
+#include <Exception.h>
 
 using Thrower::Configuration;
 using Thrower::ConfigurationOption;
@@ -27,3 +28,12 @@ TEST(ConfigurationTest, IterationThroughPredefinedConfigurationOptions)
   EXPECT_EQ(expected, actual);
 }
 
+TEST(ConfigurationTest, GettingNonExistentKey)
+{
+  Configuration conf;
+
+  EXPECT_THROW({
+    //Getting non-existent key raises throws a logic excetion
+    const std::string& value = conf.getValue("NotExistingKey");
+  }, Poco::LogicException);
+}

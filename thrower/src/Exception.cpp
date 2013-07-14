@@ -8,5 +8,3 @@
 #include "Exception.h"
 
 //POCO_IMPLEMENT_EXCEPTION(ThrowerException, Poco::RuntimeException, "Thrower exception")
-
-

@@ -91,14 +91,14 @@ namespace Thrower
     Configuration();
     virtual
     ~Configuration();
-    void handleOption(const std::string& name,
+    virtual void handleOption(const std::string& name,
                             const std::string& value);
-    inline std::map<std::string, ConfigurationOption>::const_iterator
+    virtual inline std::map<std::string, ConfigurationOption>::const_iterator
       begin() const;
-    inline std::map<std::string, ConfigurationOption>::const_iterator
+    virtual inline std::map<std::string, ConfigurationOption>::const_iterator
       end() const;
-    const std::string& getValue(const std::string& name);
-    void onOptionUpdated(const void* sender, std::string& name);
+    virtual const std::string& getValue(const std::string& name);
+    virtual void onOptionUpdated(const void* sender, std::string& name);
 
     BasicEvent<std::string> optionUpdated;
 

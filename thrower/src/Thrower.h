@@ -23,7 +23,7 @@ namespace Thrower
   /*
    * The main class representing the thrower application.
    */
-  class Thrower: public Poco::Util::ServerApplication
+  class Thrower: public ServerApplication
   {
   public:
     Thrower();

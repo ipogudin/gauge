@@ -3,7 +3,7 @@ AM_CPPFLAGS = -std=c++11 -I$(top_srcdir)/deps/usr/include \
 AM_LDFLAGS = -L$(top_srcdir)/deps/usr/lib
 LIBS= \
 -lPocoFoundation -lPocoUtil\
--lPocoXML -lpthread
+-lPocoXML -lPocoNet -lpthread
 
 bin_PROGRAMS = test
 test_LDADD=$(top_srcdir)/deps/usr/lib/libgmock_main.a \

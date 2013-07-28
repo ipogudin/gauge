@@ -33,7 +33,7 @@ using Poco::Delegate;
 namespace Thrower
 {
 
-  Thrower::Thrower():_helpRequested(false),logger(Logger::logger("Thrower"))
+  Thrower::Thrower():_helpRequested(false),_logger(Logger::logger("Thrower"))
   {
 
   }
@@ -46,7 +46,7 @@ namespace Thrower
   void Thrower::defineOptions(OptionSet& options)
   {
     Logger::initialize();
-    setLogger(logger.logger());
+    setLogger(_logger.logger());
 
     ServerApplication::defineOptions(options);
 
@@ -89,10 +89,13 @@ namespace Thrower
 
   int Thrower::main(const std::vector<std::string>& args)
   {
-    logger.debug("Application has been started");
+    _logger.debug("Application has been started");
     if (!_helpRequested)
     {
+      _manager.initialize(_configuration);
+      _manager.start();
       waitForTerminationRequest();
+      _manager.stop();
     }
     return Application::EXIT_OK;
   }

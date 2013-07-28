@@ -13,6 +13,7 @@
 
 #include "Configuration.h"
 #include "Logger.h"
+#include "Manager.h"
 
 using Poco::Util::ServerApplication;
 using Poco::Util::OptionSet;
@@ -34,9 +35,10 @@ namespace Thrower
     void defineOptions(OptionSet& options);
     int main(const std::vector<std::string>& args);
   private:
-    Logger logger;
+    Logger _logger;
     bool _helpRequested;
     Configuration _configuration;
+    Manager _manager;
   };
 
 } /* namespace Thrower */

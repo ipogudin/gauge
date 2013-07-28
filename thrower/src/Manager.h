@@ -12,6 +12,7 @@
 #include <Poco/Thread.h>
 
 #include "Configuration.h"
+#include "Logger.h"
 
 using Poco::Runnable;
 using Poco::Thread;
@@ -34,6 +35,7 @@ namespace Thrower
     void start();
     void stop();
   private:
+    Logger _logger;
     Configuration* _conf;
     Thread _thread;
   };

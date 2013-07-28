@@ -7,16 +7,22 @@
 #include <iostream>
 #include <string>
 
- #include <unistd.h>
+#include <unistd.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
+#include <Poco/Net/SocketAddress.h>
+#include <Poco/Net/StreamSocket.h>
 
 #include <Manager.h>
 #include <Configuration.h>
 
 using testing::ReturnRef;
 using testing::NiceMock;
+
+using Poco::Net::SocketAddress;
+using Poco::Net::StreamSocket;
 
 using Thrower::Manager;
 using Thrower::Configuration;
@@ -40,4 +46,10 @@ TEST(ManagerTest, RunningManagementSocket)
   manager.start();
 
   usleep(200000);
+
+  size_t pos;
+  ASSERT_NO_THROW({
+    SocketAddress sa("localhost", stoi(port, &pos, 10));
+    StreamSocket ss(sa);
+  });
 }

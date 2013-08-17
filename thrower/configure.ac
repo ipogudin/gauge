@@ -19,6 +19,7 @@ AC_PROG_RANLIB
 
 AC_CONFIG_FILES([Makefile
                  src/Makefile
-                 test/Makefile])
+                 test/Makefile
+                 generated-src/Makefile])
 
 AC_OUTPUT

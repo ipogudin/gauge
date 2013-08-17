@@ -6,3 +6,4 @@ root
 $SCRIPTPATH/clean_src
 $SCRIPTPATH/generate_build_scripts
 ./configure
+$SCRIPTPATH/generate_protobuf_src

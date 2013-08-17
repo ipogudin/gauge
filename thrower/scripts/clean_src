@@ -4,8 +4,13 @@ source $(dirname "${BASH_SOURCE[0]}")/commons
 CLEAN=$SCRIPTPATH/clean_generated_files
 
 SRC_DIR=src/
+GENERATED_SRC_DIR=generated-src/
 
 root
-$CLEAN "." "thrower"
+$CLEAN "." "generated_build_files"
 cd $SRC_DIR
-find . -type d -exec $CLEAN {} "thrower" \;
+find . -type d -exec $CLEAN {} "generated_build_files" \;
+root
+cd $GENERATED_SRC_DIR
+$CLEAN . "generated_build_files"
+$CLEAN . "src"

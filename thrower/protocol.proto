@@ -1,0 +1,15 @@
+enum MessageType {
+  PING = 0;
+  REQUEST = 1;
+  RESPONSE = 2;
+}
+
+enum StatusType {
+  OK = 1;
+  ERROR = 2;
+}
+
+message Message {
+  required MessageType type = 1;
+  optional StatusType status = 2;
+}

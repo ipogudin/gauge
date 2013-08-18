@@ -13,6 +13,8 @@
 #include "Configuration.h"
 #include "Exception.h"
 
+using namespace std;
+
 using Poco::Util::IntValidator;
 using Poco::Util::RegExpValidator;
 using Poco::Delegate;
@@ -26,10 +28,10 @@ namespace Thrower
   }
 
   ConfigurationOption::ConfigurationOption(
-       const std::string& name,
-       const std::string& description,
-       const std::string& argument,
-       const std::string& defaultValue,
+       const string& name,
+       const string& description,
+       const string& argument,
+       const string& defaultValue,
        Validator* validator):
            _name(name),
            _description(description),
@@ -45,14 +47,14 @@ namespace Thrower
   }
 
   void
-  ConfigurationOption::setValue(const std::string& value)
+  ConfigurationOption::setValue(const string& value)
   {
     _value = value;
   }
   //class Configuration
 
-  const std::string Configuration::PORT = "port";
-  const std::string Configuration::LOG_LEVEL = "loglevel";
+  const string Configuration::PORT = "port";
+  const string Configuration::LOG_LEVEL = "loglevel";
 
   Configuration::Configuration():logger(Logger::logger("Configuration"))
   {
@@ -84,18 +86,18 @@ namespace Thrower
   }
 
   void
-  Configuration::handleOption(const std::string& name, const std::string& value)
+  Configuration::handleOption(const string& name, const string& value)
   {
     if (_options.find(name) != _options.end())
     {
       _options[name].setValue(value);
-      std::string n = name;
+      string n = name;
       optionUpdated.notify(this, n);
     }
   }
 
-  const std::string&
-  Configuration::getValue(const std::string& name)
+  const string&
+  Configuration::getValue(const string& name)
   {
     if (_options.find(name) != _options.end())
     {
@@ -105,7 +107,7 @@ namespace Thrower
   }
 
   void
-  Configuration::onOptionUpdated(const void* sender, std::string& name)
+  Configuration::onOptionUpdated(const void* sender, string& name)
   {
     if (name == LOG_LEVEL)
     {
@@ -114,7 +116,7 @@ namespace Thrower
 
     if (logger.trace())
     {
-      std::string message = "The option \"";
+      string message = "The option \"";
       message.append(name);
       message.append("\" was updated");
       logger.trace(message);

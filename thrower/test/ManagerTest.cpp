@@ -7,8 +7,6 @@
 #include <iostream>
 #include <string>
 
-#include <unistd.h>
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -17,6 +15,8 @@
 
 #include <Manager.h>
 #include <Configuration.h>
+
+using namespace std;
 
 using testing::ReturnRef;
 using testing::NiceMock;
@@ -30,13 +30,13 @@ using Thrower::Configuration;
 class MockConfiguration: public Configuration
 {
   public:
-    MOCK_METHOD1(getValue, const std::string& (const std::string& name));
+    MOCK_METHOD1(getValue, const string& (const string& name));
 };
 
 TEST(ManagerTest, RunningManagementSocket)
 {
   NiceMock<MockConfiguration> mockConf;
-  const std::string port = "10000";
+  const string port = "10000";
 
   ON_CALL(mockConf, getValue(Configuration::PORT))
     .WillByDefault(ReturnRef(port));

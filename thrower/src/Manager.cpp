@@ -16,8 +16,7 @@
 #include "Exception.h"
 #include "Manager.h"
 
-using std::size_t;
-using std::string;
+using namespace std;
 
 using Poco::Exception;
 using Poco::RunnableAdapter;

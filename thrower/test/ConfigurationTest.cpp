@@ -11,13 +11,15 @@
 #include <Configuration.h>
 #include <Exception.h>
 
+using namespace std;
+
 using Thrower::Configuration;
 using Thrower::ConfigurationOption;
 
 TEST(ConfigurationTest, IterationThroughPredefinedConfigurationOptions)
 {
-  std::string expected = "loglevel port ";
-  std::string actual;
+  string expected = "loglevel port ";
+  string actual;
   Configuration conf;
 
   for (auto& pair : conf)
@@ -34,6 +36,6 @@ TEST(ConfigurationTest, GettingNonExistentKey)
 
   EXPECT_THROW({
     //Getting non-existent key raises throws a logic excetion
-    const std::string& value = conf.getValue("NotExistingKey");
+    const string& value = conf.getValue("NotExistingKey");
   }, Poco::LogicException);
 }

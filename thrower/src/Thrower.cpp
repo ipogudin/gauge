@@ -19,6 +19,8 @@
 
 #include "Thrower.h"
 
+using namespace std;
+
 using Poco::Util::Application;
 using Poco::Util::ServerApplication;
 using Poco::Util::Application;
@@ -74,20 +76,20 @@ namespace Thrower
     }
   }
 
-  void Thrower::handleHelp(const std::string& name,
-                  const std::string& value)
+  void Thrower::handleHelp(const string& name,
+                  const string& value)
   {
     HelpFormatter helpFormatter(options());
     helpFormatter.setCommand(commandName());
     helpFormatter.setUsage("OPTIONS");
     helpFormatter.setHeader(
         "Thrower is a part of tool for performance testing.");
-    helpFormatter.format(std::cout);
+    helpFormatter.format(cout);
     stopOptionsProcessing();
     _helpRequested = true;
   }
 
-  int Thrower::main(const std::vector<std::string>& args)
+  int Thrower::main(const vector<string>& args)
   {
     _logger.debug("Application has been started");
     if (!_helpRequested)

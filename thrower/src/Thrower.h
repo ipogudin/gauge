@@ -15,6 +15,8 @@
 #include "Logger.h"
 #include "Manager.h"
 
+using namespace std;
+
 using Poco::Util::ServerApplication;
 using Poco::Util::OptionSet;
 
@@ -30,10 +32,10 @@ namespace Thrower
     Thrower();
     virtual ~Thrower();
   protected:
-    void handleHelp(const std::string& name,
-                      const std::string& value);
+    void handleHelp(const string& name,
+                      const string& value);
     void defineOptions(OptionSet& options);
-    int main(const std::vector<std::string>& args);
+    int main(const vector<string>& args);
   private:
     Logger _logger;
     bool _helpRequested;

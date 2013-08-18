@@ -13,6 +13,8 @@
 #include "Poco/PatternFormatter.h"
 #include "Poco/AutoPtr.h"
 
+using namespace std;
+
 using Poco::AsyncChannel;
 using Poco::ConsoleChannel;
 using Poco::FormattingChannel;
@@ -31,18 +33,18 @@ namespace Thrower
     Poco::Logger::setChannel("", formattingChannel);
   }
 
-  Logger& Logger::logger(const std::string& name)
+  Logger& Logger::logger(const string& name)
   {
     Logger* logger = new Logger(Poco::Logger::get(name));
     return *logger;
   }
 
-  void Logger::setLevel(const std::string& level)
+  void Logger::setLevel(const string& level)
   {
-    std::vector<std::string> names;
+    vector<string> names;
     Poco::Logger::names(names);
     for(auto& name : names) {
-      Poco::Logger::get((std::string)name).setLevel(level);
+      Poco::Logger::get((string)name).setLevel(level);
     }
   }
 

@@ -16,6 +16,8 @@
 
 #include "Logger.h"
 
+using namespace std;
+
 using Poco::AutoPtr;
 using Poco::Util::Validator;
 using Poco::BasicEvent;
@@ -27,48 +29,48 @@ namespace Thrower
   public:
     ConfigurationOption();
     ConfigurationOption(
-        const std::string& name,
-        const std::string& description,
-        const std::string& argument,
-        const std::string& defaultValue,
+        const string& name,
+        const string& description,
+        const string& argument,
+        const string& defaultValue,
         Validator* validator
         );
     ~ConfigurationOption();
-    void setValue(const std::string& value);
-    inline const std::string& getName() const;
-    inline const std::string& getDescription() const;
-    inline const std::string& getArgument() const;
-    inline const std::string& getValue() const;
+    void setValue(const string& value);
+    inline const string& getName() const;
+    inline const string& getDescription() const;
+    inline const string& getArgument() const;
+    inline const string& getValue() const;
     inline AutoPtr<Validator>& getValidator();
   private:
-    std::string _name;
-    std::string _description;
-    std::string _argument;
-    std::string _defaultValue;
+    string _name;
+    string _description;
+    string _argument;
+    string _defaultValue;
     AutoPtr<Validator> _validator;
-    std::string _value;
+    string _value;
   };
 
   //ConfigurationOption inline section
-  inline const std::string&
+  inline const string&
   ConfigurationOption::getName() const
   {
     return _name;
   }
 
-  inline const std::string&
+  inline const string&
   ConfigurationOption::getDescription() const
   {
     return _description;
   }
 
-  inline const std::string&
+  inline const string&
   ConfigurationOption::getArgument() const
   {
     return _argument;
   }
 
-  inline const std::string&
+  inline const string&
   ConfigurationOption::getValue() const
   {
     if (_value.empty())
@@ -91,32 +93,32 @@ namespace Thrower
     Configuration();
     virtual
     ~Configuration();
-    virtual void handleOption(const std::string& name,
-                            const std::string& value);
-    virtual inline std::map<std::string, ConfigurationOption>::const_iterator
+    virtual void handleOption(const string& name,
+                            const string& value);
+    virtual inline map<string, ConfigurationOption>::const_iterator
       begin() const;
-    virtual inline std::map<std::string, ConfigurationOption>::const_iterator
+    virtual inline map<string, ConfigurationOption>::const_iterator
       end() const;
-    virtual const std::string& getValue(const std::string& name);
-    virtual void onOptionUpdated(const void* sender, std::string& name);
+    virtual const string& getValue(const string& name);
+    virtual void onOptionUpdated(const void* sender, string& name);
 
-    BasicEvent<std::string> optionUpdated;
+    BasicEvent<string> optionUpdated;
 
-    static const std::string PORT;
-    static const std::string LOG_LEVEL;
+    static const string PORT;
+    static const string LOG_LEVEL;
   private:
-    std::map<std::string, ConfigurationOption> _options;
+    map<string, ConfigurationOption> _options;
     Logger logger;
   };
 
   //Configuration inline section
-  inline std::map<std::string, ConfigurationOption>::const_iterator
+  inline map<string, ConfigurationOption>::const_iterator
   Configuration::begin() const
   {
     return _options.begin();
   }
 
-  inline std::map<std::string, ConfigurationOption>::const_iterator
+  inline map<string, ConfigurationOption>::const_iterator
   Configuration::end() const
   {
     return _options.end();

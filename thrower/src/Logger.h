@@ -14,7 +14,7 @@ using namespace std;
 
 using Poco::Logger;
 
-namespace Thrower
+namespace thrower
 {
 
   /*

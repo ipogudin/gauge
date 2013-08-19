@@ -22,7 +22,7 @@ using Poco::AutoPtr;
 using Poco::Util::Validator;
 using Poco::BasicEvent;
 
-namespace Thrower
+namespace thrower
 {
   class ConfigurationOption
   {

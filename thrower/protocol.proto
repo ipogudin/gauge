@@ -1,3 +1,5 @@
+package thrower.protocol;
+
 enum MessageType {
   PING = 0;
   REQUEST = 1;

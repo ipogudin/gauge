@@ -25,7 +25,7 @@ using Poco::Net::ServerSocket;
 using Poco::Net::StreamSocket;
 using Poco::Net::SocketStream;
 
-namespace Thrower
+namespace thrower
 {
 
   Manager::Manager():_conf(NULL),_logger(Logger::logger("Manager"))

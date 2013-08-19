@@ -8,6 +8,6 @@
 #include "Thrower.h"
 
 int main(int argc, char **argv) {
-  Thrower::Thrower thrower;
+  thrower::Thrower thrower;
   return thrower.run(argc, argv);
 }

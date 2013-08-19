@@ -32,7 +32,7 @@ using Poco::Util::IntValidator;
 using Poco::Util::RegExpValidator;
 using Poco::Delegate;
 
-namespace Thrower
+namespace thrower
 {
 
   Thrower::Thrower():_helpRequested(false),_logger(Logger::logger("Thrower"))

@@ -17,7 +17,7 @@
 using Poco::Runnable;
 using Poco::Thread;
 
-namespace Thrower
+namespace thrower
 {
   /*
    * This class contains essential logic

@@ -20,7 +20,7 @@ using namespace std;
 using Poco::Util::ServerApplication;
 using Poco::Util::OptionSet;
 
-namespace Thrower
+namespace thrower
 {
 
   /*

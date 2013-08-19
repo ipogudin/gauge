@@ -13,8 +13,8 @@
 
 using namespace std;
 
-using Thrower::Configuration;
-using Thrower::ConfigurationOption;
+using thrower::Configuration;
+using thrower::ConfigurationOption;
 
 TEST(ConfigurationTest, IterationThroughPredefinedConfigurationOptions)
 {

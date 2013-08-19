@@ -21,7 +21,7 @@ using Poco::FormattingChannel;
 using Poco::PatternFormatter;
 using Poco::AutoPtr;
 
-namespace Thrower
+namespace thrower
 {
   //static public
   void Logger::initialize()

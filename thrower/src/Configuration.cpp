@@ -19,7 +19,7 @@ using Poco::Util::IntValidator;
 using Poco::Util::RegExpValidator;
 using Poco::Delegate;
 
-namespace Thrower
+namespace thrower
 {
   //class ConfigurationEntry
   ConfigurationOption::ConfigurationOption():_validator(NULL)

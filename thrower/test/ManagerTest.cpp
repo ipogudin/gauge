@@ -12,9 +12,12 @@
 
 #include <Poco/Net/SocketAddress.h>
 #include <Poco/Net/StreamSocket.h>
+#include <Poco/Net/SocketStream.h>
 
 #include <Manager.h>
 #include <Configuration.h>
+
+#include <protocol.pb.h>
 
 using namespace std;
 
@@ -23,9 +26,10 @@ using testing::NiceMock;
 
 using Poco::Net::SocketAddress;
 using Poco::Net::StreamSocket;
+using Poco::Net::SocketStream;
 
-using Thrower::Manager;
-using Thrower::Configuration;
+using thrower::Manager;
+using thrower::Configuration;
 
 class MockConfiguration: public Configuration
 {
@@ -53,3 +57,4 @@ TEST(ManagerTest, RunningManagementSocket)
     StreamSocket ss(sa);
   });
 }
+

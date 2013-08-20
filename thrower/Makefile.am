@@ -1,1 +1,1 @@
-SUBDIRS = src test generated-src
+SUBDIRS = src generated-src test

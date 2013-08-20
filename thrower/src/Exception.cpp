@@ -7,4 +7,4 @@
 
 #include "Exception.h"
 
-//POCO_IMPLEMENT_EXCEPTION(ThrowerException, Poco::RuntimeException, "Thrower exception")
+POCO_IMPLEMENT_EXCEPTION(IncorrectStateException, Poco::LogicException, "Incorrect state to do the current action")

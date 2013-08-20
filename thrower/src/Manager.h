@@ -8,36 +8,65 @@
 #ifndef MANAGER_H_
 #define MANAGER_H_
 
-#include <Poco/Runnable.h>
-#include <Poco/Thread.h>
+#include <Poco/SharedPtr.h>
+#include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/StreamSocket.h>
+#include <Poco/Net/TCPServer.h>
+#include <Poco/Net/TCPServerConnection.h>
+#include <Poco/Net/TCPServerConnectionFactory.h>
 
 #include "Configuration.h"
 #include "Logger.h"
 
-using Poco::Runnable;
-using Poco::Thread;
+using Poco::SharedPtr;
+using Poco::Net::ServerSocket;
+using Poco::Net::StreamSocket;
+using Poco::Net::TCPServer;
+using Poco::Net::TCPServerConnection;
+using Poco::Net::TCPServerConnectionFactory;
 
 namespace thrower
 {
+  class ManagerTCPServerConnectionFactory;
+
   /*
    * This class contains essential logic
-   * to interact with the conductor (a central remote controller) and
+   * to interact with the conductor (central remote controller) and
    * to manage thrower's internals.
    */
-  class Manager: public Runnable
+  class Manager
   {
   public:
     Manager();
     virtual
     ~Manager();
     void initialize(Configuration& conf);
-    void run();
     void start();
     void stop();
   private:
     Logger _logger;
     Configuration* _conf;
-    Thread _thread;
+    SharedPtr<ServerSocket> _socket;
+    SharedPtr<TCPServer> _server;
+    SharedPtr<ManagerTCPServerConnectionFactory> _connectionFactory;
+  };
+
+  class ManagerTCPServerConnection: public TCPServerConnection
+  {
+  public:
+    ManagerTCPServerConnection(const Manager& manager, const StreamSocket& socket);
+    void run();
+  private:
+    Manager _manager;
+  };
+
+  class ManagerTCPServerConnectionFactory: public TCPServerConnectionFactory
+  {
+  public:
+    ManagerTCPServerConnectionFactory(const Manager& manager);
+    TCPServerConnection* createConnection(const StreamSocket& socket);
+  private:
+    Manager _manager;
   };
 } /* namespace Thrower */
 #endif /* MANAGER_H_ */

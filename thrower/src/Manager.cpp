@@ -7,35 +7,31 @@
 #include <stdio.h>
 #include <string>
 
-#include <Poco/RunnableAdapter.h>
-#include <Poco/Timespan.h>
-#include <Poco/Net/ServerSocket.h>
-#include <Poco/Net/StreamSocket.h>
-#include <Poco/Net/SocketStream.h>
-
 #include "Exception.h"
 #include "Manager.h"
+
+#include <protocol.pb.h>
 
 using namespace std;
 
 using Poco::Exception;
-using Poco::RunnableAdapter;
-using Poco::Timespan;
-using Poco::Net::ServerSocket;
-using Poco::Net::StreamSocket;
-using Poco::Net::SocketStream;
+
+using thrower::protocol::Message;
+using thrower::protocol::MessageType;
+using thrower::protocol::StatusType;
 
 namespace thrower
 {
+  //Manager
 
-  Manager::Manager():_conf(NULL),_logger(Logger::logger("Manager"))
+  Manager::Manager():_logger(Logger::logger("Manager")),_conf(NULL)
   {
-    _thread.setName("Manager");
+
   }
 
   Manager::~Manager()
   {
-    // TODO Auto-generated destructor stub
+
   }
 
   void Manager::initialize(Configuration& conf)
@@ -43,42 +39,20 @@ namespace thrower
     _conf = &conf;
   }
 
-  void Manager::run()
+  void Manager::start()
   {
+    if (!_server.isNull())
+    {
+      throw IncorrectStateException("Manager is already started");
+    }
+
     try
     {
       size_t pos;
       int port = stoi(_conf->getValue(Configuration::PORT));
-      ServerSocket server(port);
-      server.setBlocking(false);
-      //The main control loop manages the whole state of a thrower instance
-      StreamSocket managerSocket;
-      bool managerConnected = false;
-      const Timespan pollTimeout(0l, 100000000l);
-
-      while (1)
-      {
-        if (server.poll(pollTimeout, StreamSocket::SELECT_READ))
-        {
-          StreamSocket newManagerSocket = server.acceptConnection();
-          if (managerConnected)
-          {
-            SocketStream newManagerStream(newManagerSocket);
-            newManagerStream << "Manager already connected";
-            newManagerStream.close();
-          }
-          else
-          {
-            managerSocket = newManagerSocket;
-            managerConnected = true;
-          }
-        }
-
-        if (managerSocket.poll(pollTimeout, StreamSocket::SELECT_READ))
-        {
-
-        }
-      };
+      _socket = new ServerSocket(port);
+      _connectionFactory = new ManagerTCPServerConnectionFactory(*this);
+      _server = new TCPServer(_connectionFactory, *_socket);
     }
     catch (Exception& e)
     {
@@ -86,13 +60,32 @@ namespace thrower
     }
   }
 
-  void Manager::start()
-  {
-    _thread.start(*this);
-  }
-
   void Manager::stop()
   {
 
+  }
+
+  //ManagerTCPServerConnection
+  ManagerTCPServerConnection::ManagerTCPServerConnection(const Manager& manager,
+      const StreamSocket& socket): TCPServerConnection(socket),_manager(manager)
+  {
+
+  }
+
+  void
+  ManagerTCPServerConnection::run()
+  {
+  }
+
+  //ManagerTCPServerConnectionFactory
+  ManagerTCPServerConnectionFactory::ManagerTCPServerConnectionFactory(
+      const Manager& manager):_manager(manager)
+  {
+  }
+
+  TCPServerConnection*
+  ManagerTCPServerConnectionFactory::createConnection(const StreamSocket& socket)
+  {
+    return new ManagerTCPServerConnection(_manager, socket);
   }
 } /* namespace Thrower */

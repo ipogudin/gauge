@@ -1,8 +1,10 @@
-AM_CPPFLAGS = -std=c++11 -I$(top_srcdir)/deps/usr/include
+AM_CPPFLAGS = -std=c++11 -I$(top_srcdir)/deps/usr/include \
+-I$(top_srcdir)/generated-src
 AM_LDFLAGS = -L$(top_srcdir)/deps/usr/lib
 LIBS = \
 -lPocoFoundation -lPocoUtil\
--lPocoXML -lPocoNet
+-lPocoXML -lPocoNet\
+-lprotobuf
 
 bin_PROGRAMS = throwerd
 throwerd_SOURCES = throwerd.cpp

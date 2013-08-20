@@ -3,12 +3,14 @@ AM_CPPFLAGS = -std=c++11 -I$(top_srcdir)/deps/usr/include \
 AM_LDFLAGS = -L$(top_srcdir)/deps/usr/lib
 LIBS= \
 -lPocoFoundation -lPocoUtil\
--lPocoXML -lPocoNet -lpthread
+-lPocoXML -lPocoNet -lpthread\
+-lprotobuf
 
 bin_PROGRAMS = test
 test_LDADD=$(top_srcdir)/deps/usr/lib/libgmock_main.a \
   $(top_srcdir)/deps/usr/lib/libgmock.a \
   $(top_srcdir)/deps/usr/lib/libgtest.a \
-  $(top_srcdir)/src/libthrower.a
+  $(top_srcdir)/src/libthrower.a \
+  $(top_srcdir)/generated-src/libproto.a
 test_SOURCES = ConfigurationTest.cpp \
 	ManagerTest.cpp

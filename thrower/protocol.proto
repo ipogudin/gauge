@@ -1,17 +1,21 @@
 package thrower.protocol;
 
 enum MessageType {
-  PING = 0;
-  REQUEST = 1;
-  RESPONSE = 2;
+  PING = 1;
+  HELLO = 2;
+  RESPONSE = 3;
+  DATA = 4;
 }
 
 enum StatusType {
+  STATUS_UNDEFINED = 0;
   OK = 1;
   ERROR = 2;
 }
 
 message Message {
   required MessageType type = 1;
-  optional StatusType status = 2;
+  optional StatusType status = 2 [default = STATUS_UNDEFINED];
+  optional string textMessage = 3;
+  optional bytes data = 4;
 }

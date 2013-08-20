@@ -13,6 +13,6 @@
 
 #include "commons.h"
 
-//POCO_DECLARE_EXCEPTION(Thrower_API, ThrowerException, Poco::RuntimeException)
+POCO_DECLARE_EXCEPTION(Thrower_API, IncorrectStateException, Poco::LogicException)
 
 #endif /* EXCEPTION_H_ */

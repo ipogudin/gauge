@@ -8,6 +8,8 @@
 #ifndef THROWER_H_
 #define THROWER_H_
 
+#include <google/protobuf/stubs/common.h>
+
 #include <Poco/Util/ServerApplication.h>
 #include <Poco/Util/OptionSet.h>
 
@@ -43,5 +45,9 @@ namespace thrower
     Manager _manager;
   };
 
+  extern Logger protobufLogger;
+
+  void LogHandler(google::protobuf::LogLevel level,
+          const char* filename, int line, const std::string& message);
 } /* namespace Thrower */
 #endif /* THROWER_H_ */

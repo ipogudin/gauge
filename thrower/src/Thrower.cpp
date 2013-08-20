@@ -21,6 +21,8 @@
 
 using namespace std;
 
+using google::protobuf::SetLogHandler;
+
 using Poco::Util::Application;
 using Poco::Util::ServerApplication;
 using Poco::Util::Application;
@@ -49,6 +51,7 @@ namespace thrower
   {
     Logger::initialize();
     setLogger(_logger.logger());
+    google::protobuf::SetLogHandler(LogHandler);
 
     ServerApplication::defineOptions(options);
 
@@ -100,6 +103,15 @@ namespace thrower
       _manager.stop();
     }
     return Application::EXIT_OK;
+  }
+
+  Logger protobufLogger = Logger::logger("Protobuf");
+
+  void LogHandler(google::protobuf::LogLevel level,
+          const char* filename, int line, const std::string& message)
+  {
+    //if (!protobufLogger.notice()) return;
+    protobufLogger.notice(message);
   }
 } /* namespace Thrower */
 

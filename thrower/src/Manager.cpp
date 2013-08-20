@@ -4,8 +4,10 @@
  *  Created on: Jul 14, 2013
  *      Author: Ivan Pogudin <i.a.pogudin@gmail.com>
  */
-#include <stdio.h>
+#include <iostream>
 #include <string>
+
+#include <Poco/Net/SocketStream.h>
 
 #include "Exception.h"
 #include "Manager.h"
@@ -15,6 +17,7 @@
 using namespace std;
 
 using Poco::Exception;
+using Poco::Net::SocketStream;
 
 using thrower::protocol::Message;
 using thrower::protocol::MessageType;
@@ -53,6 +56,7 @@ namespace thrower
       _socket = new ServerSocket(port);
       _connectionFactory = new ManagerTCPServerConnectionFactory(*this);
       _server = new TCPServer(_connectionFactory, *_socket);
+      _server->start();
     }
     catch (Exception& e)
     {
@@ -75,6 +79,9 @@ namespace thrower
   void
   ManagerTCPServerConnection::run()
   {
+    SocketStream stream(socket());
+    Message request;
+    request.ParseFromIstream(&stream);
   }
 
   //ManagerTCPServerConnectionFactory

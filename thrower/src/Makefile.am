@@ -10,7 +10,8 @@ bin_PROGRAMS = throwerd
 throwerd_SOURCES = throwerd.cpp
 
 throwerd_LDADD = \
-  libthrower.a
+  $(top_srcdir)/src/libthrower.a \
+  $(top_srcdir)/generated-src/libproto.a
 
 noinst_LIBRARIES = libthrower.a
 

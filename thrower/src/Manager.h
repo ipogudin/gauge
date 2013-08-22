@@ -43,9 +43,10 @@ namespace thrower
     void initialize(Configuration& conf);
     void start();
     void stop();
+    Configuration* configuration();
   private:
     Logger _logger;
-    Configuration* _conf;
+    Configuration* _configuration;
     SharedPtr<ServerSocket> _socket;
     SharedPtr<TCPServer> _server;
     SharedPtr<ManagerTCPServerConnectionFactory> _connectionFactory;

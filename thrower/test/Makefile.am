@@ -13,4 +13,5 @@ test_LDADD=$(top_srcdir)/deps/usr/lib/libgmock_main.a \
   $(top_srcdir)/src/libthrower.a \
   $(top_srcdir)/generated-src/libproto.a
 test_SOURCES = ConfigurationTest.cpp \
-	ManagerTest.cpp
+	ManagerTest.cpp \
+	MessageTransportTest.cpp

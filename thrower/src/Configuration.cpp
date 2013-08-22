@@ -55,12 +55,13 @@ namespace thrower
 
   const string Configuration::PORT = "port";
   const string Configuration::LOG_LEVEL = "loglevel";
+  const string Configuration::PROTOCOL_TIMEOUT = "protocoltimeout";
 
   Configuration::Configuration():logger(Logger::logger("Configuration"))
   {
     _options[PORT] = ConfigurationOption(
         PORT,
-        "Set a management port",
+        "Set a management port (default 4040)",
         PORT,
         "4040",
         new IntValidator(1, 65535)
@@ -75,6 +76,13 @@ namespace thrower
         new RegExpValidator(
           "(trace|debug|information|notice|warning|error|critical|fatal)"
           )
+        );
+    _options[PROTOCOL_TIMEOUT] = ConfigurationOption(
+        PROTOCOL_TIMEOUT,
+        "Set a protocols timeout (ms)",
+        PROTOCOL_TIMEOUT,
+        "10000",
+        new IntValidator(0, 1000000)
         );
 
     optionUpdated += Poco::delegate(this, &Configuration::onOptionUpdated);

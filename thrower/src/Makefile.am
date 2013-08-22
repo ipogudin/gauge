@@ -21,5 +21,6 @@ libthrower_a_SOURCES = \
   Configuration.h Configuration.cpp \
   Logger.h Logger.cpp \
   Exception.h Exception.cpp \
-  Manager.h Manager.cpp
+  Manager.h Manager.cpp \
+  MessageTransport.h
   

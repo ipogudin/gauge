@@ -5,6 +5,7 @@
  *      Author: Ivan Pogudin <i.a.pogudin@gmail.com>
  */
 #include <iostream>
+#include <set>
 
 #include <gtest/gtest.h>
 
@@ -18,16 +19,19 @@ using thrower::ConfigurationOption;
 
 TEST(ConfigurationTest, IterationThroughPredefinedConfigurationOptions)
 {
-  string expected = "loglevel port ";
-  string actual;
+  set<string> expectedOptions;
+  expectedOptions.insert(Configuration::PORT);
+  expectedOptions.insert(Configuration::LOG_LEVEL);
+  expectedOptions.insert(Configuration::PROTOCOL_TIMEOUT);
+
   Configuration conf;
 
   for (auto& pair : conf)
   {
-    actual.append(pair.second.getName());
-    actual.append(" ");
+    EXPECT_TRUE(
+        expectedOptions.find(pair.second.getName()) != expectedOptions.end()
+        );
   }
-  EXPECT_EQ(expected, actual);
 }
 
 TEST(ConfigurationTest, GettingNonExistentKey)

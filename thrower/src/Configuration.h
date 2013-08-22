@@ -106,6 +106,7 @@ namespace thrower
 
     static const string PORT;
     static const string LOG_LEVEL;
+    static const string PROTOCOL_TIMEOUT;
   private:
     map<string, ConfigurationOption> _options;
     Logger logger;

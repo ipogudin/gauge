@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+#include <Poco/Timespan.h>
 #include <Poco/Net/SocketStream.h>
 
 #include "Exception.h"
@@ -17,6 +18,7 @@
 using namespace std;
 
 using Poco::Exception;
+using Poco::Timespan;
 using Poco::Net::SocketStream;
 
 using thrower::protocol::Message;
@@ -27,7 +29,7 @@ namespace thrower
 {
   //Manager
 
-  Manager::Manager():_logger(Logger::logger("Manager")),_conf(NULL)
+  Manager::Manager():_logger(Logger::logger("Manager")),_configuration(NULL)
   {
 
   }
@@ -39,7 +41,7 @@ namespace thrower
 
   void Manager::initialize(Configuration& conf)
   {
-    _conf = &conf;
+    _configuration = &conf;
   }
 
   void Manager::start()
@@ -52,7 +54,7 @@ namespace thrower
     try
     {
       size_t pos;
-      int port = stoi(_conf->getValue(Configuration::PORT));
+      int port = stoi(_configuration->getValue(Configuration::PORT));
       _socket = new ServerSocket(port);
       _connectionFactory = new ManagerTCPServerConnectionFactory(*this);
       _server = new TCPServer(_connectionFactory, *_socket);
@@ -69,19 +71,26 @@ namespace thrower
 
   }
 
+  Configuration* Manager::configuration()
+  {
+    return _configuration;
+  }
+
   //ManagerTCPServerConnection
   ManagerTCPServerConnection::ManagerTCPServerConnection(const Manager& manager,
       const StreamSocket& socket): TCPServerConnection(socket),_manager(manager)
   {
-
+    /*const string stimeout = _manager.configuration()->getValue(Configuration::PROTOCOL_TIMEOUT);
+    size_t pos;
+    const long timeout = stol(stimeout, &pos, 10);
+    Timespan ts(0l, timeout * 1000);
+    ((StreamSocket)socket).setBlocking(false);*/
   }
 
   void
   ManagerTCPServerConnection::run()
   {
-    SocketStream stream(socket());
-    Message request;
-    request.ParseFromIstream(&stream);
+
   }
 
   //ManagerTCPServerConnectionFactory

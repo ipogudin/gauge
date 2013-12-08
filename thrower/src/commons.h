@@ -10,5 +10,4 @@
 
 #define Thrower_API
 
-
 #endif /* COMMONS_H_ */

@@ -17,7 +17,6 @@
 using Poco::SharedPtr;
 using Poco::Buffer;
 
-using thrower::protocol::MessageHeader;
 using thrower::protocol::Message;
 using thrower::protocol::MessageType;
 using thrower::protocol::StatusType;
@@ -56,35 +55,24 @@ namespace thrower
   template <class TSocket>
   SharedPtr<Message> MessageTransport<TSocket>::read()
   {
-    MessageHeader header;
-    unsigned int bufferSize = 64;
+    unsigned int bufferSize = 3;
     unsigned int readSize = 0;
     Buffer<char> headerBuffer(bufferSize);
-    bool parsed = false;
 
     while(readSize < bufferSize)
     {
       readSize += _socket.receiveBytes(
           headerBuffer.begin() + readSize, bufferSize - readSize, 0);
-      std::cout << readSize << std::endl << std::endl << std::endl;
-      if (header.ParseFromArray(headerBuffer.begin(), readSize))
-      {
-        parsed = true;
-        break;
-      }
     }
 
-    if (!parsed)
-    {
-      throw Poco::RuntimeException("that's pity");
-    }
-
-    unsigned int messageSize = 0;
-    messageSize = header.size();
-    readSize = 0;
+    unsigned long messageSize = 0;
+    messageSize |= ((unsigned long)headerBuffer.begin()[0]) << 16;
+    messageSize |= ((unsigned long)headerBuffer.begin()[1]) << 8;
+    messageSize |= ((unsigned long)headerBuffer.begin()[2]);
 
     Buffer<char> messageBuffer(messageSize);
-    //copy already read bytes
+    readSize = 0;
+    //copy of bytes which have been already read
 
     while(readSize < messageSize)
     {
@@ -92,7 +80,7 @@ namespace thrower
           messageBuffer.begin() + readSize, messageSize - readSize, 0);
     }
 
-    SharedPtr<Message> message;
+    SharedPtr<Message> message(new Message);
     if (!message->ParseFromArray(messageBuffer.begin(), messageSize))
     {
         throw Poco::RuntimeException("that's pity");

@@ -12,7 +12,6 @@
 
 using Poco::SharedPtr;
 
-using thrower::protocol::MessageHeader;
 using thrower::protocol::Message;
 using thrower::protocol::MessageType;
 using thrower::protocol::StatusType;
@@ -49,14 +48,14 @@ public:
 
   int receiveBytes(const void* buffer, int length, int flags)
   {
-    if (_readingParts < 1) return 0;
-
     _readingParts--;
 
     int maxPartSize =
         (_readingBufferLength > length)?length:_readingBufferLength;
 
-    unsigned int partSize = random() % maxPartSize;
+    int r = rand();
+    unsigned int partSize = (_readingParts < 1 || length < 100)?
+        maxPartSize:(r % maxPartSize);
 
     memcpy((void *)buffer, _readingBuffer, partSize);
 
@@ -74,12 +73,13 @@ private:
 };
 
 #define PREPARE_BUF(buf, size, message) \
-  MessageHeader header;\
-  header.set_size(message.ByteSize());\
-  unsigned long size = message.ByteSize() + header.ByteSize();\
-  char buf[size];\
-  header.SerializeToArray(buf, size);\
-  message.SerializeToArray(buf + header.ByteSize(), message.ByteSize());
+  unsigned long messageSize = message.ByteSize();\
+  unsigned long size = messageSize + 3;\
+  Buffer<char> buf(size);\
+  buf.begin()[0] = (char)((unsigned long)(messageSize & 0x0000000000ff0000) >> 16);\
+  buf.begin()[1] = (char)((unsigned long)(messageSize & 0x000000000000ff00) >> 8);\
+  buf.begin()[2] = (char)(messageSize & 0x00000000000000ff);\
+  message.SerializeToArray(buf.begin() + 3, size);
 
 TEST(MessageTransportTest, ReadingMessage)
 {
@@ -88,7 +88,7 @@ TEST(MessageTransportTest, ReadingMessage)
   originalMessage.set_type(MessageType::RESPONSE);
   PREPARE_BUF(buf, size, originalMessage)
 
-  MockStreamSocket mockSocket(buf, size, 1, 0);
+  MockStreamSocket mockSocket(buf.begin(), size, 0, 0);
   MessageTransport<MockStreamSocket> messageTransport(mockSocket);
 
   SharedPtr<Message> receivedMessage = messageTransport.read();
@@ -104,7 +104,7 @@ TEST(MessageTransportTest, ReadingMessageByParts)
   originalMessage.set_type(MessageType::RESPONSE);
   PREPARE_BUF(buf, size, originalMessage)
 
-  MockStreamSocket mockSocket(buf, size, 2, 0);
+  MockStreamSocket mockSocket(buf.begin(), size, 0, 0);
   MessageTransport<MockStreamSocket> messageTransport(mockSocket);
 
   SharedPtr<Message> receivedMessage = messageTransport.read();

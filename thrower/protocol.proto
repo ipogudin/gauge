@@ -14,10 +14,6 @@ enum StatusType {
   ERROR = 2;
 }
 
-message MessageHeader {
-  required int32 size = 1;
-}
-
 message Message {
   required MessageType type = 1 [default = TYPE_UNDEFINED];
   optional StatusType status = 2 [default = STATUS_UNDEFINED];

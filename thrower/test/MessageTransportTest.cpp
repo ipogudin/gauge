@@ -25,16 +25,16 @@ class MockStreamSocket
 public:
   /*
    * Configure MockStreamSocket to simulate behavior during reading/writing.
-   * readingBuffer is randomly divided into readingParts number of parts.
+   * The buffer is randomly divided into readingParts number of parts.
    * writingParts can be defined to simulate random partial writing.
    */
   MockStreamSocket(
-      const void* readingBuffer,
+      const void* buffer,
       int readingBufferLength,
       int readingParts,
       int writingParts):
-        _readingBuffer((char*)readingBuffer),
-        _readingBufferLength(readingBufferLength),
+        _buffer((char*)buffer),
+        _bufferLength(readingBufferLength),
         _readingParts(readingParts),
         _writingParts(writingParts)
   {
@@ -43,7 +43,21 @@ public:
 
   int sendBytes(const void* buffer, int length, int flags)
   {
-    return 0;
+    _writingParts--;
+
+    int maxPartSize =
+        (_bufferLength > length)?length:_bufferLength;
+
+    int r = rand();
+    unsigned int partSize = (_writingParts < 1)?
+        maxPartSize:(r % maxPartSize);
+
+    memcpy(_buffer, (void *)buffer, partSize);
+
+    _buffer += partSize;
+    _bufferLength -= partSize;
+
+    return partSize;
   }
 
   int receiveBytes(const void* buffer, int length, int flags)
@@ -51,23 +65,23 @@ public:
     _readingParts--;
 
     int maxPartSize =
-        (_readingBufferLength > length)?length:_readingBufferLength;
+        (_bufferLength > length)?length:_bufferLength;
 
     int r = rand();
-    unsigned int partSize = (_readingParts < 1 || length < 100)?
+    unsigned int partSize = (_readingParts < 1)?
         maxPartSize:(r % maxPartSize);
 
-    memcpy((void *)buffer, _readingBuffer, partSize);
+    memcpy((void *)buffer, _buffer, partSize);
 
-    _readingBuffer += partSize;
-    _readingBufferLength -= partSize;
+    _buffer += partSize;
+    _bufferLength -= partSize;
 
     return partSize;
   }
 
 private:
-  char* _readingBuffer;
-  int _readingBufferLength;
+  char* _buffer;
+  int _bufferLength;
   int _readingParts;
   int _writingParts;
 };
@@ -104,11 +118,51 @@ TEST(MessageTransportTest, ReadingMessageByParts)
   originalMessage.set_type(MessageType::RESPONSE);
   PREPARE_BUF(buf, size, originalMessage)
 
-  MockStreamSocket mockSocket(buf.begin(), size, 0, 0);
+  MockStreamSocket mockSocket(buf.begin(), size, 3, 0);
   MessageTransport<MockStreamSocket> messageTransport(mockSocket);
 
   SharedPtr<Message> receivedMessage = messageTransport.read();
   ASSERT_FALSE(receivedMessage.isNull());
   ASSERT_EQ(MessageType::RESPONSE, receivedMessage->type());
   ASSERT_EQ(StatusType::OK, receivedMessage->status());
+}
+
+TEST(MessageTransportTest, WritingMessage)
+{
+  Message originalMessage;
+  originalMessage.set_status(StatusType::OK);
+  originalMessage.set_type(MessageType::RESPONSE);
+  PREPARE_BUF(expectedResult, size, originalMessage)
+
+  Buffer<char> actualResult(size);
+  std::fill_n(actualResult.begin(), size, 0);
+
+  MockStreamSocket mockSocket(actualResult.begin(), size, 0, 0);
+  MessageTransport<MockStreamSocket> messageTransport(mockSocket);
+
+  messageTransport.write(originalMessage);
+  for (int i = 0; i < size; i++)
+  {
+    ASSERT_EQ(expectedResult[i], actualResult[i]);
+  }
+}
+
+TEST(MessageTransportTest, WritingMessageByParts)
+{
+  Message originalMessage;
+  originalMessage.set_status(StatusType::OK);
+  originalMessage.set_type(MessageType::RESPONSE);
+  PREPARE_BUF(expectedResult, size, originalMessage)
+
+  Buffer<char> actualResult(size);
+  std::fill_n(actualResult.begin(), size, 0);
+
+  MockStreamSocket mockSocket(actualResult.begin(), size, 0, 3);
+  MessageTransport<MockStreamSocket> messageTransport(mockSocket);
+
+  messageTransport.write(originalMessage);
+  for (int i = 0; i < size; i++)
+  {
+    ASSERT_EQ(expectedResult[i], actualResult[i]);
+  }
 }

@@ -91,6 +91,20 @@ namespace thrower
   template <class TSocket>
   void MessageTransport<TSocket>::write(Message& message)
   {
+    unsigned long messageSize = message.ByteSize();
+    unsigned long size = messageSize + 3;
+    Buffer<char> buffer(size);
+    buffer.begin()[0] = (char)((unsigned long)(messageSize & 0x0000000000ff0000) >> 16);
+    buffer.begin()[1] = (char)((unsigned long)(messageSize & 0x000000000000ff00) >> 8);
+    buffer.begin()[2] = (char)(messageSize & 0x00000000000000ff);
+    message.SerializeToArray(buffer.begin() + 3, size);
+
+    int writtenSize = 0;
+    while(writtenSize < size)
+    {
+      writtenSize += _socket.sendBytes(
+          buffer.begin() + writtenSize, size - writtenSize, 0);
+    }
   }
 } /* namespace Thrower */
 #endif /* MESSAGEREADER_H_ */

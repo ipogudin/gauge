@@ -73,9 +73,12 @@ TEST(ManagerTest, HelloManagementInterface)
 {
   NiceMock<MockConfiguration> mockConf;
   const string port = "10000";
+  const string timeout = "1000";
 
   ON_CALL(mockConf, getValue(Configuration::PORT))
     .WillByDefault(ReturnRef(port));
+  ON_CALL(mockConf, getValue(Configuration::PROTOCOL_TIMEOUT))
+        .WillByDefault(ReturnRef(timeout));
 
   SharedPtr<Manager> manager = startManager(mockConf);
 
@@ -95,9 +98,12 @@ TEST(ManagerTest, TwoConnectionsToManagementInterface)
 {
   NiceMock<MockConfiguration> mockConf;
   const string port = "10000";
+  const string timeout = "1000";
 
   ON_CALL(mockConf, getValue(Configuration::PORT))
     .WillByDefault(ReturnRef(port));
+  ON_CALL(mockConf, getValue(Configuration::PROTOCOL_TIMEOUT))
+      .WillByDefault(ReturnRef(timeout));
 
   SharedPtr<Manager> manager = startManager(mockConf);
 

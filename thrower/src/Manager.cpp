@@ -80,11 +80,11 @@ namespace thrower
   ManagerTCPServerConnection::ManagerTCPServerConnection(const Manager& manager,
       const StreamSocket& socket): TCPServerConnection(socket),_manager(manager)
   {
-    /*const string stimeout = _manager.configuration()->getValue(Configuration::PROTOCOL_TIMEOUT);
+    const string stimeout = _manager.configuration()->getValue(Configuration::PROTOCOL_TIMEOUT);
     size_t pos;
     const long timeout = stol(stimeout, &pos, 10);
     Timespan ts(0l, timeout * 1000);
-    ((StreamSocket)socket).setBlocking(false);*/
+    ((StreamSocket)socket).setBlocking(false);
   }
 
   void

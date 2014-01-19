@@ -9,6 +9,7 @@
 #define MANAGER_H_
 
 #include <Poco/SharedPtr.h>
+#include <Poco/Mutex.h>
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/StreamSocket.h>
 #include <Poco/Net/TCPServer.h>
@@ -19,6 +20,7 @@
 #include "Logger.h"
 
 using Poco::SharedPtr;
+using Poco::Mutex;
 using Poco::Net::ServerSocket;
 using Poco::Net::StreamSocket;
 using Poco::Net::TCPServer;
@@ -44,6 +46,10 @@ namespace thrower
     void start();
     void stop();
     Configuration* configuration();
+
+    SharedPtr<Mutex> sessionMutex;
+    volatile StreamSocket* activeSession = nullptr;
+
   private:
     Logger _logger;
     Configuration* _configuration;
@@ -58,7 +64,7 @@ namespace thrower
     ManagerTCPServerConnection(const Manager& manager, const StreamSocket& socket);
     void run();
   private:
-    Manager _manager;
+    Manager* _manager;
   };
 
   class ManagerTCPServerConnectionFactory: public TCPServerConnectionFactory
@@ -67,7 +73,7 @@ namespace thrower
     ManagerTCPServerConnectionFactory(const Manager& manager);
     TCPServerConnection* createConnection(const StreamSocket& socket);
   private:
-    Manager _manager;
+    Manager* _manager;
   };
 } /* namespace Thrower */
 #endif /* MANAGER_H_ */

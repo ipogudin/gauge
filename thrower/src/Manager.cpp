@@ -12,6 +12,7 @@
 
 #include "Exception.h"
 #include "Manager.h"
+#include "MessageTransport.h"
 
 #include <protocol.pb.h>
 
@@ -30,6 +31,7 @@ namespace thrower
   //Manager
 
   Manager::Manager():_logger(Logger::logger("Manager")),_configuration(NULL)
+    ,sessionMutex(new Mutex)
   {
 
   }
@@ -78,30 +80,59 @@ namespace thrower
 
   //ManagerTCPServerConnection
   ManagerTCPServerConnection::ManagerTCPServerConnection(const Manager& manager,
-      const StreamSocket& socket): TCPServerConnection(socket),_manager(manager)
+      const StreamSocket& socket): TCPServerConnection(socket),_manager((Manager*)&manager)
   {
-    const string stimeout = _manager.configuration()->getValue(Configuration::PROTOCOL_TIMEOUT);
+    const string stimeout = _manager->configuration()->getValue(Configuration::PROTOCOL_TIMEOUT);
     size_t pos;
     const long timeout = stol(stimeout, &pos, 10);
     Timespan ts(0l, timeout * 1000);
-    ((StreamSocket)socket).setBlocking(false);
+    ((StreamSocket)socket).setReceiveTimeout(ts);
+    ((StreamSocket)socket).setSendTimeout(ts);
+    ((StreamSocket)socket).setBlocking(true);
   }
 
   void
   ManagerTCPServerConnection::run()
   {
+    MessageTransport<StreamSocket> transport(socket());
 
+    SharedPtr<Message> message = transport.read();
+
+    switch(message->type()) {
+    case MessageType::PING:
+    case MessageType::HELLO:
+      _manager->sessionMutex->lock();
+      try
+      {
+        Message response;
+        response.set_type(MessageType::RESPONSE);
+        if (_manager->activeSession == nullptr)
+        {
+          response.set_status(StatusType::OK);
+          _manager->activeSession = &socket();
+        }
+        else {
+          response.set_status(StatusType::ERROR);
+        }
+        transport.write(response);
+      }
+      catch (Exception& e) {
+
+      }
+      _manager->sessionMutex->unlock();
+      break;
+    }
   }
 
   //ManagerTCPServerConnectionFactory
   ManagerTCPServerConnectionFactory::ManagerTCPServerConnectionFactory(
-      const Manager& manager):_manager(manager)
+      const Manager& manager):_manager((Manager*)&manager)
   {
   }
 
   TCPServerConnection*
   ManagerTCPServerConnectionFactory::createConnection(const StreamSocket& socket)
   {
-    return new ManagerTCPServerConnection(_manager, socket);
+    return new ManagerTCPServerConnection(*_manager, socket);
   }
 } /* namespace Thrower */

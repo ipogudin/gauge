@@ -79,7 +79,7 @@ namespace thrower
         );
     _options[PROTOCOL_TIMEOUT] = ConfigurationOption(
         PROTOCOL_TIMEOUT,
-        "Set a protocols timeout (ms)",
+        "Set protocol timeout (ms)",
         PROTOCOL_TIMEOUT,
         "10000",
         new IntValidator(0, 1000000)

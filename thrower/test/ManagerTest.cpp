@@ -17,6 +17,7 @@
 
 #include <Manager.h>
 #include <Configuration.h>
+#include <MessageTransport.h>
 
 #include <protocol.pb.h>
 
@@ -32,6 +33,7 @@ using Poco::Net::SocketStream;
 
 using thrower::Manager;
 using thrower::Configuration;
+using thrower::MessageTransport;
 
 using thrower::protocol::Message;
 using thrower::protocol::MessageType;
@@ -54,7 +56,6 @@ SharedPtr<Manager> startManager(Configuration& conf)
 
 SharedPtr<Message> executeRequest(Configuration& conf, Message& request)
 {
-  SharedPtr<Message> response = new Message();
   size_t pos;
   SocketAddress address("localhost",
       stoi(conf.getValue(Configuration::PORT), &pos, 10));
@@ -62,11 +63,9 @@ SharedPtr<Message> executeRequest(Configuration& conf, Message& request)
   Timespan ts(1l, 0l);
   socket.setReceiveTimeout(ts);
   socket.setSendTimeout(ts);
-  SocketStream stream(socket);
-  request.SerializeToOstream(&stream);
-  stream.flush();
-  response->ParseFromIstream(&stream);
-  return response;
+  MessageTransport<StreamSocket> transport(socket);
+  transport.write(request);
+  return transport.read();
 };
 
 TEST(ManagerTest, HelloManagementInterface)
@@ -110,22 +109,23 @@ TEST(ManagerTest, TwoConnectionsToManagementInterface)
   Message requestFrom1Client;
   requestFrom1Client.set_type(MessageType::HELLO);
 
-  SharedPtr<Message> responseFor1Client;
+  SharedPtr<Message> responseFor1stClient;
 
   ASSERT_NO_THROW({
-    responseFor1Client = executeRequest(mockConf, requestFrom1Client);
+    responseFor1stClient = executeRequest(mockConf, requestFrom1Client);
   });
-  EXPECT_FALSE(responseFor1Client.isNull());
-  EXPECT_EQ(StatusType::OK, responseFor1Client->status());
+  EXPECT_FALSE(responseFor1stClient.isNull());
+  EXPECT_EQ(StatusType::OK, responseFor1stClient->status());
 
-  Message requestFrom2Client;
-  requestFrom2Client.set_type(MessageType::HELLO);
+  Message requestFrom2ndClient;
+  requestFrom2ndClient.set_type(MessageType::HELLO);
 
   SharedPtr<Message> responseFor2Client;
 
   ASSERT_NO_THROW({
-    responseFor2Client = executeRequest(mockConf, requestFrom2Client);
+    responseFor2Client = executeRequest(mockConf, requestFrom2ndClient);
   });
   EXPECT_FALSE(responseFor2Client.isNull());
   EXPECT_EQ(StatusType::ERROR, responseFor2Client->status());
 }
+

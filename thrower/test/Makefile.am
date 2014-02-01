@@ -7,11 +7,12 @@ LIBS= \
 -lprotobuf
 
 bin_PROGRAMS = test
-test_LDADD=$(top_srcdir)/deps/usr/lib/libgmock_main.a \
+test_LDADD=\
   $(top_srcdir)/deps/usr/lib/libgmock.a \
   $(top_srcdir)/deps/usr/lib/libgtest.a \
   $(top_srcdir)/src/libthrower.a \
   $(top_srcdir)/generated-src/libproto.a
-test_SOURCES = ConfigurationTest.cpp \
-	ManagerTest.cpp \
-	MessageTransportTest.cpp
+test_SOURCES = test.cpp \
+  ConfigurationTest.cpp \
+  ManagerTest.cpp \
+  MessageTransportTest.cpp

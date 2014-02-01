@@ -26,6 +26,9 @@ namespace thrower
   //static public
   void Logger::initialize()
   {
+    //initialization of a root logger if it haven't used yet
+    Poco::Logger::get("");
+    //log format configuring
     ConsoleChannel* consoleChannel = new ConsoleChannel;
     PatternFormatter* patternFormatter = new PatternFormatter;
     patternFormatter->setProperty("pattern", "%Y-%m-%d %H:%M:%S.%i [%p] %s: %t");
@@ -59,4 +62,5 @@ namespace thrower
   {
 
   }
+
 } /* namespace Thrower */

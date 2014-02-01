@@ -14,9 +14,10 @@ using namespace std;
 
 using Poco::Logger;
 
+#define INIT_TRACE_LOGGER thrower::Logger::initialize(); thrower::Logger::setLevel("trace");
+
 namespace thrower
 {
-
   /*
    * The wrapper for Poco::Logger
    */

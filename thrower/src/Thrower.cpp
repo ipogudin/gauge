@@ -110,7 +110,7 @@ namespace thrower
   void LogHandler(google::protobuf::LogLevel level,
           const char* filename, int line, const std::string& message)
   {
-    //if (!protobufLogger.notice()) return;
+    if (!protobufLogger.notice()) return;
     protobufLogger.notice(message);
   }
 } /* namespace Thrower */

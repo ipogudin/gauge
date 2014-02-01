@@ -12,7 +12,9 @@
 #include <Poco/Buffer.h>
 
 #include <protocol.pb.h>
-#include <Exception.h>
+
+#include "Exception.h"
+#include "Logger.h"
 
 using Poco::SharedPtr;
 using Poco::Buffer;
@@ -37,11 +39,13 @@ namespace thrower
     void write(Message& message);
   private:
     TSocket _socket;
+    Logger _logger;
   };
 
   //Implementation
   template <class TSocket>
-  MessageTransport<TSocket>::MessageTransport(TSocket& socket):_socket(socket)
+  MessageTransport<TSocket>::MessageTransport(TSocket& socket):
+    _logger(Logger::logger("MessageTransport")),_socket(socket)
   {
 
   }
@@ -59,6 +63,7 @@ namespace thrower
     unsigned int readSize = 0;
     Buffer<char> headerBuffer(bufferSize);
 
+    _logger.trace("waiting for a header with message's size");
     while(readSize < bufferSize)
     {
       readSize += _socket.receiveBytes(
@@ -70,10 +75,11 @@ namespace thrower
     messageSize |= ((unsigned long)headerBuffer.begin()[1]) << 8;
     messageSize |= ((unsigned long)headerBuffer.begin()[2]);
 
+    _logger.trace("message's size has been read");
     Buffer<char> messageBuffer(messageSize);
     readSize = 0;
-    //copy of bytes which have been already read
 
+    _logger.trace("waiting for a message");
     while(readSize < messageSize)
     {
       readSize += _socket.receiveBytes(
@@ -83,7 +89,7 @@ namespace thrower
     SharedPtr<Message> message(new Message);
     if (!message->ParseFromArray(messageBuffer.begin(), messageSize))
     {
-        throw Poco::RuntimeException("that's pity");
+        throw ManageProtocolException("Message can't be parsed");
     }
     return message;
   }

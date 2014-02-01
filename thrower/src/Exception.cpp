@@ -7,4 +7,8 @@
 
 #include "Exception.h"
 
-POCO_IMPLEMENT_EXCEPTION(IncorrectStateException, Poco::LogicException, "Incorrect state to do the current action")
+POCO_IMPLEMENT_EXCEPTION(IncorrectStateException,
+    Poco::LogicException, "Incorrect state to do the current action")
+
+POCO_IMPLEMENT_EXCEPTION(ManageProtocolException,
+    Poco::RuntimeException, "Manage protocol error")

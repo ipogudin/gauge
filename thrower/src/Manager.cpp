@@ -80,47 +80,58 @@ namespace thrower
 
   //ManagerTCPServerConnection
   ManagerTCPServerConnection::ManagerTCPServerConnection(const Manager& manager,
-      const StreamSocket& socket): TCPServerConnection(socket),_manager((Manager*)&manager)
+      const StreamSocket& socket): TCPServerConnection(socket),
+          _logger(Logger::logger("Manager")),_manager((Manager*)&manager)
   {
     const string stimeout = _manager->configuration()->getValue(Configuration::PROTOCOL_TIMEOUT);
     size_t pos;
     const long timeout = stol(stimeout, &pos, 10);
-    Timespan ts(0l, timeout * 1000);
+    Timespan ts(0l, timeout * Timespan::MILLISECONDS);
     ((StreamSocket)socket).setReceiveTimeout(ts);
     ((StreamSocket)socket).setSendTimeout(ts);
-    ((StreamSocket)socket).setBlocking(true);
+    ((StreamSocket)socket).setBlocking(false);
   }
 
   void
   ManagerTCPServerConnection::run()
   {
+    _logger.trace("a new connection from a control node was received");
     MessageTransport<StreamSocket> transport(socket());
 
-    SharedPtr<Message> message = transport.read();
+    try {
+      SharedPtr<Message> message = transport.read();
+      _logger.trace("a message was received");
 
-    switch(message->type()) {
-    case MessageType::PING:
-    case MessageType::HELLO:
-      _manager->sessionMutex->lock();
-      try
-      {
-        Message response;
-        response.set_type(MessageType::RESPONSE);
-        if (_manager->activeSession == nullptr)
+      switch(message->type()) {
+      case MessageType::PING:
+      case MessageType::HELLO:
+        _manager->sessionMutex->lock();
+        try
         {
-          response.set_status(StatusType::OK);
-          _manager->activeSession = &socket();
+          Message response;
+          response.set_type(MessageType::RESPONSE);
+          if (_manager->activeSession == nullptr)
+          {
+            response.set_status(StatusType::OK);
+            _manager->activeSession = &socket();
+          }
+          else {
+            response.set_status(StatusType::ERROR);
+          }
+          transport.write(response);
         }
-        else {
-          response.set_status(StatusType::ERROR);
+        catch (std::exception& e) {
+            throw e;
         }
-        transport.write(response);
+        _manager->sessionMutex->unlock();
+        break;
       }
-      catch (Exception& e) {
-
-      }
-      _manager->sessionMutex->unlock();
-      break;
+    }
+    catch (std::exception& e)
+    {
+      _logger.trace("protocol error, a connection is being closed");
+      socket().close();
+      throw e;
     }
   }
 

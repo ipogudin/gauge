@@ -71,6 +71,8 @@ public:
     unsigned int partSize = (_readingParts < 1)?
         maxPartSize:(r % maxPartSize);
 
+    if (partSize < 1) partSize = 1;
+
     memcpy((void *)buffer, _buffer, partSize);
 
     _buffer += partSize;

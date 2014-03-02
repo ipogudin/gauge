@@ -50,20 +50,27 @@ SharedPtr<Manager> startManager(Configuration& conf)
   SharedPtr<Manager> manager = new Manager();
   manager->initialize(conf);
   manager->start();
-  usleep(200000);
+  usleep(200000l);
   return manager;
 };
 
-SharedPtr<Message> executeRequest(Configuration& conf, Message& request)
+SharedPtr<Message> executeRequest(Configuration& conf, Message& request, long writeTimeout)
 {
   size_t pos;
   SocketAddress address("localhost",
       stoi(conf.getValue(Configuration::PORT), &pos, 10));
   StreamSocket socket(address);
-  Timespan ts(1l, 0l);
-  socket.setReceiveTimeout(ts);
-  socket.setSendTimeout(ts);
+  if (writeTimeout > 0) {
+    Timespan ts(0l, writeTimeout);
+    socket.setReceiveTimeout(ts);
+    socket.setSendTimeout(ts);
+    socket.setBlocking(false);
+  }
+
   MessageTransport<StreamSocket> transport(socket);
+  if (writeTimeout > 0) {
+      usleep(writeTimeout * 1000l);
+  }
   transport.write(request);
   return transport.read();
 };
@@ -72,7 +79,7 @@ TEST(ManagerTest, HelloManagementInterface)
 {
   NiceMock<MockConfiguration> mockConf;
   const string port = "10000";
-  const string timeout = "1000";
+  const string timeout = "900";
 
   ON_CALL(mockConf, getValue(Configuration::PORT))
     .WillByDefault(ReturnRef(port));
@@ -87,7 +94,7 @@ TEST(ManagerTest, HelloManagementInterface)
   SharedPtr<Message> response;
 
   ASSERT_NO_THROW({
-    response = executeRequest(mockConf, request);
+    response = executeRequest(mockConf, request, 0);
   });
   EXPECT_FALSE(response.isNull());
   EXPECT_EQ(StatusType::OK, response->status());
@@ -112,7 +119,7 @@ TEST(ManagerTest, TwoConnectionsToManagementInterface)
   SharedPtr<Message> responseFor1stClient;
 
   ASSERT_NO_THROW({
-    responseFor1stClient = executeRequest(mockConf, requestFrom1Client);
+    responseFor1stClient = executeRequest(mockConf, requestFrom1Client, 0);
   });
   EXPECT_FALSE(responseFor1stClient.isNull());
   EXPECT_EQ(StatusType::OK, responseFor1stClient->status());
@@ -123,9 +130,32 @@ TEST(ManagerTest, TwoConnectionsToManagementInterface)
   SharedPtr<Message> responseFor2Client;
 
   ASSERT_NO_THROW({
-    responseFor2Client = executeRequest(mockConf, requestFrom2ndClient);
+    responseFor2Client = executeRequest(mockConf, requestFrom2ndClient, 0);
   });
   EXPECT_FALSE(responseFor2Client.isNull());
   EXPECT_EQ(StatusType::ERROR, responseFor2Client->status());
 }
 
+TEST(ManagerTest, HungInitialConnection)
+{
+  NiceMock<MockConfiguration> mockConf;
+  const string port = "10000";
+  const string timeout = "50";
+
+  ON_CALL(mockConf, getValue(Configuration::PORT))
+    .WillByDefault(ReturnRef(port));
+  ON_CALL(mockConf, getValue(Configuration::PROTOCOL_TIMEOUT))
+        .WillByDefault(ReturnRef(timeout));
+
+  SharedPtr<Manager> manager = startManager(mockConf);
+
+  Message request;
+  request.set_type(MessageType::HELLO);
+
+  SharedPtr<Message> response;
+
+  ASSERT_ANY_THROW({
+    response = executeRequest(mockConf, request, 100l);
+  });
+  EXPECT_TRUE(response.isNull());
+}

@@ -18,6 +18,7 @@
 
 using Poco::SharedPtr;
 using Poco::Buffer;
+using Poco::TimeoutException;
 
 using thrower::protocol::Message;
 using thrower::protocol::MessageType;
@@ -66,8 +67,20 @@ namespace thrower
     _logger.trace("waiting for a header with message's size");
     while(readSize < bufferSize)
     {
-      readSize += _socket.receiveBytes(
-          headerBuffer.begin() + readSize, bufferSize - readSize, 0);
+      int currentReadSize = 0;
+      try {
+          currentReadSize = _socket.receiveBytes(
+              headerBuffer.begin() + readSize, bufferSize - readSize, 0);
+      }
+      catch (TimeoutException& e)
+      {
+          throw new ProtocolTimeoutException();
+      }
+      if (currentReadSize < 1 && readSize < bufferSize)
+      {
+        throw new ConductorClosedConnectionException();
+      }
+      readSize += currentReadSize;
     }
 
     unsigned long messageSize = 0;

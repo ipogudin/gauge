@@ -12,3 +12,10 @@ POCO_IMPLEMENT_EXCEPTION(IncorrectStateException,
 
 POCO_IMPLEMENT_EXCEPTION(ManageProtocolException,
     Poco::RuntimeException, "Manage protocol error")
+
+POCO_IMPLEMENT_EXCEPTION(ConductorClosedConnectionException,
+    ManageProtocolException, "Conductor closed connection")
+
+POCO_IMPLEMENT_EXCEPTION(ProtocolTimeoutException,
+    ManageProtocolException, "Protocol timeout")
+

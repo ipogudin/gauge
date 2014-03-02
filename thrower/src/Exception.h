@@ -17,4 +17,8 @@ POCO_DECLARE_EXCEPTION(Thrower_API, IncorrectStateException, Poco::LogicExceptio
 
 POCO_DECLARE_EXCEPTION(Thrower_API, ManageProtocolException, Poco::RuntimeException)
 
+POCO_DECLARE_EXCEPTION(Thrower_API, ConductorClosedConnectionException, ManageProtocolException)
+
+POCO_DECLARE_EXCEPTION(Thrower_API, ProtocolTimeoutException, ManageProtocolException)
+
 #endif /* EXCEPTION_H_ */

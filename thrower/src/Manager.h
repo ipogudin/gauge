@@ -65,6 +65,7 @@ namespace thrower
     void run();
   private:
     Manager* _manager;
+    Logger _logger;
   };
 
   class ManagerTCPServerConnectionFactory: public TCPServerConnectionFactory

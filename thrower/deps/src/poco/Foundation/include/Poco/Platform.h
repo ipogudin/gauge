@@ -1,7 +1,7 @@
 //
 // Platform.h
 //
-// $Id: //poco/1.4/Foundation/include/Poco/Platform.h#7 $
+// $Id: //poco/1.4/Foundation/include/Poco/Platform.h#9 $
 //
 // Library: Foundation
 // Package: Core
@@ -102,6 +102,9 @@
 #elif defined(__QNX__)
 	#define POCO_OS_FAMILY_UNIX 1
 	#define POCO_OS POCO_OS_QNX
+#elif defined(__CYGWIN__)
+	#define POCO_OS_FAMILY_UNIX 1
+	#define POCO_OS POCO_OS_CYGWIN
 #elif defined(unix) || defined(__unix) || defined(__unix__)
 	#define POCO_OS_FAMILY_UNIX 1
 	#define POCO_OS POCO_OS_UNKNOWN_UNIX
@@ -111,9 +114,6 @@
 #elif defined(_WIN32) || defined(_WIN64)
 	#define POCO_OS_FAMILY_WINDOWS 1
 	#define POCO_OS POCO_OS_WINDOWS_NT
-#elif defined(__CYGWIN__)
-	#define POCO_OS_FAMILY_UNIX 1
-	#define POCO_OS POCO_OS_CYGWIN
 #elif defined(__VMS)
 	#define POCO_OS_FAMILY_VMS 1
 	#define POCO_OS POCO_OS_VMS
@@ -145,6 +145,7 @@
 #define POCO_ARCH_S390    0x0c
 #define POCO_ARCH_SH      0x0d
 #define POCO_ARCH_NIOS2   0x0e
+#define POCO_ARCH_ARM64   0x0f
 
 
 #if defined(__ALPHA) || defined(__alpha) || defined(__alpha__) || defined(_M_ALPHA)
@@ -183,6 +184,15 @@
 #elif defined(__arm__) || defined(__arm) || defined(ARM) || defined(_ARM_) || defined(__ARM__) || defined(_M_ARM)
 	#define POCO_ARCH POCO_ARCH_ARM
 	#if defined(__ARMEB__)
+		#define POCO_ARCH_BIG_ENDIAN 1
+	#else
+		#define POCO_ARCH_LITTLE_ENDIAN 1
+	#endif
+#elif defined(__arm64__) || defined(__arm64) 
+	#define POCO_ARCH POCO_ARCH_ARM64
+	#if defined(__ARMEB__)
+		#define POCO_ARCH_BIG_ENDIAN 1
+	#elif defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 		#define POCO_ARCH_BIG_ENDIAN 1
 	#else
 		#define POCO_ARCH_LITTLE_ENDIAN 1

@@ -1,7 +1,7 @@
 //
 // WebSocket.cpp
 //
-// $Id: //poco/1.4/Net/src/WebSocket.cpp#5 $
+// $Id: //poco/1.4/Net/src/WebSocket.cpp#8 $
 //
 // Library: Net
 // Package: WebSocket
@@ -76,6 +76,14 @@ WebSocket::WebSocket(HTTPClientSession& cs, HTTPRequest& request, HTTPResponse& 
 WebSocket::WebSocket(HTTPClientSession& cs, HTTPRequest& request, HTTPResponse& response, HTTPCredentials& credentials):
 	StreamSocket(connect(cs, request, response, credentials))
 {
+}
+
+
+WebSocket::WebSocket(const Socket& socket): 
+	StreamSocket(socket)
+{
+	if (!dynamic_cast<WebSocketImpl*>(impl()))
+		throw InvalidArgumentException("Cannot assign incompatible socket");
 }
 
 
@@ -194,7 +202,14 @@ WebSocketImpl* WebSocket::connect(HTTPClientSession& cs, HTTPRequest& request, H
 			throw WebSocketException("Not authorized", WS_ERR_UNAUTHORIZED);
 		}
 	}
-	throw WebSocketException("Cannot upgrade to WebSocket connection", response.getReason(), WS_ERR_NO_HANDSHAKE);
+	if (response.getStatus() == HTTPResponse::HTTP_OK)
+	{
+		throw WebSocketException("The server does not understand the WebSocket protocol", WS_ERR_NO_HANDSHAKE);
+	}
+	else
+	{
+		throw WebSocketException("Cannot upgrade to WebSocket connection", response.getReason(), WS_ERR_NO_HANDSHAKE);
+	}
 }
 
 
@@ -209,7 +224,7 @@ WebSocketImpl* WebSocket::completeHandshake(HTTPClientSession& cs, HTTPResponse&
 	std::string accept = response.get("Sec-WebSocket-Accept", "");
 	if (accept != computeAccept(key))
 		throw WebSocketException("Invalid or missing Sec-WebSocket-Accept header in handshake response", WS_ERR_NO_HANDSHAKE);
-	return new WebSocketImpl(static_cast<StreamSocketImpl*>(cs.socket().impl()), true);
+	return new WebSocketImpl(static_cast<StreamSocketImpl*>(cs.detachSocket().impl()), true);
 }
 
 

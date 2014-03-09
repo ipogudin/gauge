@@ -1,5 +1,48 @@
 This is the changelog file for the POCO C++ Libraries.
 
+Release 1.4.6p2 (2013-09-16)
+============================
+
+- fixed GH #156: Possible buffer overrun in Foundation/EventLogChannel
+- XML: fixed an issue with parsing a memory buffer > 2 GB
+- upgraded to expat 2.1.0
+- Data/ODBC: added support for setting query timeout (via setProperty
+  of "queryTimeout"). Timeout is int, given in seconds.
+- fixed a potential endless loop in SecureStreamSocketImpl::sendBytes() 
+  and also removed unnecessary code.
+- fixed GH #159: Crash in openssl CRYPTO_thread_id() after library libPocoCrypto.so 
+  has been unloaded.
+- fixed GH #155: MailOutputStream mangles consecutive newline sequences 
+- fixed GH# 139: FileChannel::PROP_FLUSH is invalid (contains a tab character)
+- fixed GH# 173: HTTPClientSession::proxyConnect forces DNS lookup of host names
+- fixed GH# 194: MessageNotification constructor is inefficient.
+- fixed GH# 189: Poco::NumberParser::tryParse() documentation bug
+- fixed GH# 172: IPv6 Host field is stripped of Brackets in HTTPClientSession
+- fixed GH# 188: Net: SocketAddress operator < unusable for std::map key
+- fixed GH# 128: DOMWriter incorrectly adds SYSTEM keyword to DTD if PUBLIC is 
+  already specified
+- fixed GH# 65: Poco::format() misorders sign and padding specifiers
+- upgraded bundled SQLite to 3.7.17
+- upgraded bundled zlib to 1.2.8
+- fixed a potential memory leak in Poco::Net::HTTPClientSession if it is misused 
+  (e.g., sendRequest() is sent two times in a row without an intermediate call to 
+  receiveResponse(), or by calling receiveResponse() two times in a row without 
+  an intermediate call to sendRequest()) - GH #217
+- removed a few unnecessary protected accessor methods from Poco::Net::HTTPClientSession 
+  that would provide inappropriate access to internal state
+- fixed GH# 223 (Poco::Net::HTTPCookie does not support expiry times in the past)
+- fixed GH# 233: ServerSocket::bind6(Poco::UInt16 port, bool reuseAddress, bool ipV6Only) 
+  does not work
+- added ColorConsoleChannel and WindowsColorConsoleChannel classes supporting
+  colorizing log messages
+- fixed GH# 259: Poco::EventLogChannel fails to find 64bit Poco Foundation dll
+- fixed GH# 254: UTF8::icompare unexpected behavior
+- Poco::UUID::tryParse() also accepts UUIDs without hyphens. Also updated documentation
+  (links to specifications).
+- Added support for ARM64 architecture and iPhone 5s 64-bit builds
+  (POCO_TARGET_OSARCH=arm64).
+  
+
 Release 1.4.6p1 (2013-03-06)
 ============================
 
@@ -1815,4 +1858,4 @@ building the libraries.
 
 
 --
-$Id: //poco/1.4/dist/CHANGELOG#79 $
+$Id: //poco/1.4/dist/CHANGELOG#94 $

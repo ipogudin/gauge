@@ -1,0 +1,31 @@
+#Eclipse project metadata
+.cproject
+.project
+.settings
+
+#Autotools generated files
+thrower/aclocal.m4
+thrower/autom4te.cache
+thrower/config.log
+thrower/config.status
+thrower/configure
+thrower/depcomp
+thrower/install-sh
+thrower/Makefile
+thrower/Makefile.in
+thrower/missing
+thrower/autoscan.log
+thrower/config.guess
+thrower/config.sub
+
+#compiled files
+.deps
+*.[oa]
+!*.cpp
+!*.h
+
+#binaries
+thrower/src/ohrowerd
+thrower/test/test
+
+thrower/deps/usr

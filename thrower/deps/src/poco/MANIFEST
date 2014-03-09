@@ -1539,6 +1539,7 @@ Foundation/src/FPEnvironment_DUMMY.cpp
 Foundation/src/FPEnvironment_SUN.cpp
 Foundation/src/FPEnvironment_WIN32.cpp
 Foundation/src/Glob.cpp
+Foundation/src/gzguts.h
 Foundation/src/Hash.cpp
 Foundation/src/HashStatistic.cpp
 Foundation/src/HexBinaryDecoder.cpp

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source $(dirname "${BASH_SOURCE[0]}")/settings
+
+# The absolute path to this script
+SCRIPT=$(readlink -f $0)
+# The absolute path to the scripts directory
+SCRIPTPATH=$(dirname $SCRIPT)
+PROJECT_ROOT=$SCRIPTPATH/$PROJECT_ROOT_FROM_SCRIPTS_LOCATION
+
+function set_project_root() {
+  cd $PROJECT_ROOT
+}

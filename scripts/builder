@@ -1,0 +1,33 @@
+#!/bin/bash
+
+source $(dirname "${BASH_SOURCE[0]}")/commons
+source $(dirname "${BASH_SOURCE[0]}")/thrower
+source $(dirname "${BASH_SOURCE[0]}")/conductor
+
+help()
+{
+echo "Usage: builder [command] [sub-command]"
+echo "You must use on of the following commands:"
+echo "  help - to print this help message"
+echo "  thrower - to execute a sub-command related with the thrower component" 
+echo "  thrower help - to print help message related with the thrower component"
+echo "  conductor - to execute a sub-command related with the conductor component"
+echo "  conductor help - to print help message related with the conductor component"
+}
+
+case $1 in
+  thrower)
+  thrower $2
+  ;;
+  conductor)
+  conductor $2
+  ;;
+  help)
+  help
+  ;;
+  *)
+  echo "Unknown or ansent command."
+  echo
+  help
+  ;;
+esac

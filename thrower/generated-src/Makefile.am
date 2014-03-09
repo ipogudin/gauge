@@ -3,8 +3,8 @@ AM_LDFLAGS = -L$(top_srcdir)/deps/usr/lib
 LIBS = \
 -lprotobuf
 
-noinst_LIBRARIES = libproto.a
+noinst_LIBRARIES = libgaugeproto.a
 
-libproto_a_SOURCES = \
-  protocol.pb.cc protocol.pb.h
+libgaugeproto_a_SOURCES = \
+  gauge.pb.cc gauge.pb.h
   

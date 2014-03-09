@@ -2,6 +2,7 @@
 .cproject
 .project
 .settings
+
 #Autotools generated files
 aclocal.m4
 autom4te.cache
@@ -16,10 +17,30 @@ missing
 autoscan.log
 config.guess
 config.sub
-#compile files
+
+#compiled files
 .deps
 *.[oa]
 !*.cpp
 !*.h
+
+#binaries
 src/throwerd
 test/test
+
+deps/usr
+#exclusions for dependencies
+!deps/src/*/Makefile
+!deps/src/*/*/Makefile
+!deps/src/*/*/*/Makefile
+!deps/src/*/*/*/*/Makefile
+!deps/src/*/*/*/*/*/Makefile
+!deps/src/*/*/*/*/*/*/Makefile
+!deps/src/*/*/*/*/*/*/*/Makefile
+!deps/src/*/configureM
+!deps/src/*/*/configure
+!deps/src/*/*/*/configure
+!deps/src/*/*/*/*/configure
+!deps/src/*/*/*/*/*/configure
+!deps/src/*/*/*/*/*/*/configure
+!deps/*/*/*/*/*/*/*/configure

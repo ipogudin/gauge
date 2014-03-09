@@ -1,0 +1,218 @@
+#!/bin/bash
+
+THIS=$SCRIPTPATH/thrower
+THROWER_ROOT=$PROJECT_ROOT/$THROWER_DIR_PATH
+
+POCO_SRC=deps/src/poco
+GMOCK_SRC=deps/src/gmock
+GTEST_SRC=deps/src/gmock/gtest
+PROTOBUF_SRC=deps/src/protobuf
+DEPS_DIR=deps/usr
+GENERATED_SRC_DIR=generated-src
+
+DEPS_DIR_FULL_PATH=$THROWER_ROOT/$DEPS_DIR
+
+set_thrower_root()
+{
+  cd $THROWER_ROOT
+}
+
+thrower_build_deps()
+{
+  set_thrower_root
+  cd $POCO_SRC
+  ./configure --omit=Data/ODBC,Data/MySQL,Data/SQLite --prefix=$DEPS_DIR_FULL_PATH
+  make $MAKE_GLOBAL_ARGS && make install
+
+  set_thrower_root
+  cd $GMOCK_SRC
+  ./configure
+  make $MAKE_GLOBAL_ARGS
+  cp -rf lib/.libs/* ../../usr/lib
+  cp -rf include/* ../../usr/include
+  cp -rf gtest/lib/.libs/* ../../usr/lib
+  cp -rf gtest/include/* ../../usr/include
+
+  set_thrower_root
+  cd $PROTOBUF_SRC
+  ./configure --prefix=$DEPS_DIR_FULL_PATH
+  make $MAKE_GLOBAL_ARGS
+  make install
+}
+
+thrower_clean_autotools_generated_files()
+{
+  make clean
+  rm -rf \
+  aclocal.m4 \
+  autom4te.cache \
+  config.log \
+  config.status \
+  configure \
+  depcomp \
+  install-sh \
+  Makefile \
+  Makefile.in \
+  missing \
+  autoscan.log \
+  config.guess \
+  config.sub
+}
+
+thrower_clean_poco_generated_files()
+{
+  rm -rf \
+  .dep \
+  bin \
+  obj
+}
+
+thrower_clean_poco_src()
+{
+  set_thrower_root
+  cd $POCO_SRC
+  rm -rf \
+  config.make \
+  lib
+  find ./ -type d -exec $THIS clean-poco-generated-files {} \;
+}
+
+thrower_clean_deps_dir()
+{
+  set_thrower_root
+  cd $DEPS_DIR
+  rm -rf *
+}
+
+thrower_clean_gmock_src()
+{
+  set_thrower_root
+  cd $GMOCK_SRC
+  make clean
+  rm -rf \
+  build-aux/config.h \
+  build-aux/stamp-h1 \
+  gtest/build-aux/config.h \
+  gtest/build-aux/stamp-h1 \
+  gtest/lib \
+  gtest/libtool \
+  gtest/samples/.dirstamp \
+  gtest/scripts/gtest-config \
+  gtest/src/.dirstamp \
+  lib \
+  libtool \
+  scripts/gmock-config \
+  src/.dirstamp
+}
+
+thrower_clean_protobuf_src()
+{
+  set_thrower_root
+  cd $PROTOBUF_SRC
+  make clean
+  rm -rf \
+  config.h \
+  gtest/build-aux/stamp-h1 \
+  gtest/libtool \
+  gtest/scripts/gtest-config \
+  libtool \
+  protobuf-lite.pc \
+  protobuf.pc \
+  stamp-h1
+}
+
+thrower_clean_deps()
+{
+  thrower_clean_deps_dir
+  
+  thrower_clean_poco_src
+
+  thrower_clean_gmock_src
+  
+  thrower_clean_protobuf_src
+}
+
+thrower_generate_bulding_scripts()
+{
+  set_thrower_root
+  aclocal
+  autoconf
+  automake --add-missing
+}
+
+thrower_clean_building_scripts()
+{
+  set_thrower_root
+  thrower_clean_autotools_generated_files
+}
+
+thrower_clean_generated_src()
+{
+  set_thrower_root
+  cd $GENERATED_SRC_DIR
+  rm -rf *.cc \
+  *.cpp \
+  *.h
+}
+
+thrower_generate_proto()
+{
+  set_project_root
+  cd $COMMONS_DIR_PATH
+  $PROJECT_ROOT/$THROWER_DIR_PATH/$DEPS_DIR/bin/protoc --cpp_out="$PROJECT_ROOT/$THROWER_DIR_PATH/$GENERATED_SRC_DIR" "$PROTO_FILE"
+}
+
+thrower_help()
+{
+  echo "Usage: builder thrower [sub-command]"
+  echo "You must use on of the following sub-commands:"
+  echo "  help - to print this help message"
+  echo "  build-deps - build all dependencies"
+  echo "  clean-deps - clean all files generated during building of dependencies"
+  echo "  generate-building-scripts - generate building scripts (autotools)"
+  echo "  generate-proto - generate protocol sources from protobuf files"
+}
+
+thrower()
+{
+  case $1 in
+    help)
+    thrower_help
+    ;;
+    clean-deps)
+    thrower_clean_deps
+    ;;
+    build-deps)
+    thrower_build_deps
+    ;;
+    generate-building-scripts)
+    thrower_generate_bulding_scripts
+    ;;
+    generate-proto)
+    thrower_generate_proto
+    ;;
+    git status)
+    thrower_clean_building_scripts
+    thrower_generate_bulding_scripts
+    thrower_generate_proto
+    set_thrower_root
+    ./configure
+    ;;
+    *)
+    echo "Unknown or ansent command."
+    echo
+    thrower_help
+    ;;
+  esac
+}
+
+case $1 in
+  clean-poco-generated-files)
+  cd $2
+  thrower_clean_poco_generated_files
+  ;;
+  clean-autotools-generated-files)
+  cd $2
+  thrower_clean_autotools_generated_files
+  ;;
+esac

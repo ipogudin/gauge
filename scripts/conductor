@@ -1,0 +1,22 @@
+#!/bin/bash
+
+conductor_help()
+{
+  echo "Usage: builder conductor [sub-command]"
+  echo "You must use on of the following sub-commands:"
+  echo "  help - to print this help message"
+}
+
+conductor()
+{
+  case $1 in
+  help)
+  conductor_help
+  ;;
+  *)
+  echo "Unknown or ansent command."
+  echo
+  conductor_help
+  ;;
+  esac
+}

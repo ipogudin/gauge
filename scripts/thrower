@@ -191,7 +191,7 @@ thrower()
     generate-proto)
     thrower_generate_proto
     ;;
-    git status)
+    regenerate-building-scripts)
     thrower_clean_building_scripts
     thrower_generate_bulding_scripts
     thrower_generate_proto

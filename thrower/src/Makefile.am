@@ -11,7 +11,7 @@ throwerd_SOURCES = throwerd.cpp
 
 throwerd_LDADD = \
   $(top_srcdir)/src/libthrower.a \
-  $(top_srcdir)/generated-src/libproto.a
+  $(top_srcdir)/generated-src/libgaugeproto.a
 
 noinst_LIBRARIES = libthrower.a
 

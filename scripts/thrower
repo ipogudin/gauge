@@ -17,27 +17,43 @@ set_thrower_root()
   cd $THROWER_ROOT
 }
 
-thrower_build_deps()
+thrower_build_poco()
 {
   set_thrower_root
   cd $POCO_SRC
   ./configure --omit=Data/ODBC,Data/MySQL,Data/SQLite --prefix=$DEPS_DIR_FULL_PATH
   make $MAKE_GLOBAL_ARGS && make install
+}
 
+thrower_build_gmock()
+{
   set_thrower_root
   cd $GMOCK_SRC
+  aclocal
   ./configure
   make $MAKE_GLOBAL_ARGS
   cp -rf lib/.libs/* ../../usr/lib
   cp -rf include/* ../../usr/include
   cp -rf gtest/lib/.libs/* ../../usr/lib
   cp -rf gtest/include/* ../../usr/include
+}
 
+thrower_build_protobuf()
+{
   set_thrower_root
   cd $PROTOBUF_SRC
   ./configure --prefix=$DEPS_DIR_FULL_PATH
   make $MAKE_GLOBAL_ARGS
   make install
+}
+
+thrower_build_deps()
+{
+  thrower_build_poco
+  
+  thrower_build_gmock
+  
+  thrower_build_protobufs
 }
 
 thrower_clean_autotools_generated_files()
@@ -171,6 +187,7 @@ thrower_help()
   echo "  clean-deps - clean all files generated during building of dependencies"
   echo "  generate-building-scripts - generate building scripts (autotools)"
   echo "  generate-proto - generate protocol sources from protobuf files"
+  echo "  regenerate-building-scripts - regenerate building scripts (cleaning and generation with protobuf)"
 }
 
 thrower()
@@ -184,6 +201,12 @@ thrower()
     ;;
     build-deps)
     thrower_build_deps
+    ;;
+    build-gmock)
+    thrower_build_gmock
+    ;;
+    clean-gmock)
+    thrower_clean_gmock_src
     ;;
     generate-building-scripts)
     thrower_generate_bulding_scripts

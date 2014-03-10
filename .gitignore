@@ -17,6 +17,12 @@ thrower/missing
 thrower/autoscan.log
 thrower/config.guess
 thrower/config.sub
+thrower/generated-src/Makefile
+thrower/generated-src/Makefile.in
+thrower/src/Makefile
+thrower/src/Makefile.in
+thrower/test/Makefile
+thrower/test/Makefile.in
 
 #compiled files
 .deps
@@ -25,7 +31,7 @@ thrower/config.sub
 !*.h
 
 #binaries
-thrower/src/ohrowerd
+thrower/src/throwerd
 thrower/test/test
 
 thrower/deps/usr

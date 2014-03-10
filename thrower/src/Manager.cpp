@@ -14,7 +14,7 @@
 #include "Manager.h"
 #include "MessageTransport.h"
 
-#include <protocol.pb.h>
+#include <gauge.pb.h>
 
 using namespace std;
 

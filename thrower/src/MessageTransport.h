@@ -11,7 +11,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Buffer.h>
 
-#include <protocol.pb.h>
+#include <gauge.pb.h>
 
 #include "Exception.h"
 #include "Logger.h"

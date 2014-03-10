@@ -53,7 +53,7 @@ thrower_build_deps()
   
   thrower_build_gmock
   
-  thrower_build_protobufs
+  thrower_build_protobuf
 }
 
 thrower_clean_autotools_generated_files()
